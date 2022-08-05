@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Flagorama</string>
+
+    <!-- Strings for the home screen -->
+    <string name="africa">Africa</string>
+    <string name="americas">Americas</string>
+    <string name="asia">Asia</string>
+    <string name="europe">Europe</string>
+    <string name="oceania">Oceania</string>
+
+    <!-- Strings for accessibility -->
+    <string name="flag_description">Flag of %s</string>
+</resources>
