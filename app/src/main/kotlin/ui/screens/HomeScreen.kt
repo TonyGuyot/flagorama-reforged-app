@@ -18,6 +18,8 @@ package io.github.tonyguyot.flagorama.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MenuOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,11 +36,12 @@ import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onClick: (Continent) -> Unit
+    onDrawerClick: () -> Unit,
+    onClick: (Continent) -> Unit,
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = { HomeTopAppBar() }
+        topBar = { HomeTopAppBar(onDrawerClick) }
     ) { paddingValues ->
         ContinentList(modifier = Modifier.padding(paddingValues), onClick = onClick)
     }
@@ -46,9 +49,19 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar() {
+fun HomeTopAppBar(onNavigationClick: () -> Unit) {
     CenterAlignedTopAppBar(
-        title = { Text(stringResource(id = R.string.app_name)) }
+        title = { Text(stringResource(id = R.string.app_name)) },
+        navigationIcon = {
+            IconButton(
+                onClick = onNavigationClick
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MenuOpen,
+                    contentDescription = stringResource(id = R.string.navigation_drawer)
+                )
+            }
+        }
     )
 }
 
@@ -86,6 +99,6 @@ fun ContinentList(
 @Composable
 private fun DefaultPreview() {
     FlagoramaTheme {
-        HomeScreen { }
+        HomeScreen(onDrawerClick = { }) { }
     }
 }

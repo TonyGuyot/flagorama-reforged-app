@@ -24,11 +24,14 @@ import io.github.tonyguyot.flagorama.ui.screens.CountryListScreen
 import io.github.tonyguyot.flagorama.ui.screens.HomeScreen
 
 @Composable
-fun FlagoramaNavHost(navController: NavHostController) {
+fun FlagoramaNavHost(
+    navController: NavHostController,
+    onDrawerClick: () -> Unit
+) {
     NavHost(navController = navController, startDestination = "home") {
         // Top level destinations
         composable("home") {
-            HomeScreen { continent ->
+            HomeScreen(onDrawerClick = onDrawerClick) { continent ->
                 navController.navigate("countries/${continent.key}")
             }
         }
