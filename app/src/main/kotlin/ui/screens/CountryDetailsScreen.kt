@@ -15,14 +15,18 @@
  */
 package io.github.tonyguyot.flagorama.ui.screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +35,7 @@ import coil.compose.AsyncImage
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.data.utils.Resource
 import io.github.tonyguyot.flagorama.domain.model.CountryDetails
+import io.github.tonyguyot.flagorama.ui.common.WaitingIndicator
 import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 import io.github.tonyguyot.flagorama.viewModel.CountryDetailsViewModel
 
@@ -42,7 +47,7 @@ fun CountryDetailsScreen(
     val state by viewModel.uiState.observeAsState(Resource.loading())
     when (state.status) {
         Resource.Status.SUCCESS -> state.data?.let { CountryDetails(country = it) }
-        else -> Text("Nothing")
+        else -> WaitingIndicator()
     }
 }
 
@@ -52,16 +57,76 @@ private fun CountryDetails(country: CountryDetails) {
         modifier = Modifier.padding(all = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AsyncImage(
-            model = country.flagUrl,
-            contentDescription = stringResource(R.string.flag_description, country.name)
+        CountryFlag(country.flagUrl, country.name)
+        CountryTitle(country.name)
+        CountryNativeNames(country.nativeNames)
+        CountryTableData(
+            listOf(
+                Pair("Where:", country.subregion),
+                Pair("Capital", country.capital),
+                Pair("Area", country.area.toString()),
+                Pair("Population", country.population.toString())
+            )
         )
-        Text(country.name)
-        country.nativeNames.forEach { nativeName ->
-            Text(nativeName)
-        }
-        Text(country.capital)
     }
+}
+
+@Composable
+private fun CountryFlag(flagUrl: String, countryName: String) {
+    AsyncImage(
+        model = flagUrl,
+        contentDescription = stringResource(R.string.flag_description, countryName)
+    )
+}
+
+@Composable
+private fun CountryTitle(title: String) {
+    Text(title, style = MaterialTheme.typography.headlineSmall)
+}
+
+@Composable
+private fun CountryNativeNames(nativeNames: List<String>) {
+    nativeNames.forEach { nativeName ->
+        CountryNativeName(nativeName)
+    }
+}
+
+@Composable
+private fun CountryNativeName(name: String) {
+    Text(name, style = MaterialTheme.typography.titleMedium)
+}
+
+@Composable
+private fun CountryTableData(tableData: List<Pair<String, String>>) {
+    val column1Weight = .3f // 30%
+    val column2Weight = .7f // 70%
+
+    LazyColumn(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp)) {
+        items(items = tableData) {
+            val (id, text) = it
+            Row(Modifier.fillMaxWidth()) {
+                TableCell(text = id, weight = column1Weight)
+                TableCell(text = text, weight = column2Weight)
+            }
+        }
+    }
+}
+
+@Composable
+fun RowScope.TableCell(
+    text: String,
+    weight: Float
+) {
+    Text(
+        text = text,
+        Modifier
+            .border(1.dp, Color.Black)
+            .weight(weight)
+            .padding(8.dp)
+    )
 }
 
 @Preview(showBackground = true)

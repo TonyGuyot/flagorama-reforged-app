@@ -37,7 +37,7 @@ class CountryRemoteDataSource(private val service: RestCountriesService): BaseRe
     companion object Mapper {
         /** map a country network object to a country logic object */
         fun toCountryOverview(source: RestCountryOverview) = CountryOverview(
-            id = source.code,
+            code = source.code,
             name = source.name.common,
             flagUrl = source.flags.svgImageUrl,
             flag = source.flag
@@ -45,11 +45,11 @@ class CountryRemoteDataSource(private val service: RestCountriesService): BaseRe
 
         /** map a country network object to a country logic object */
         fun toCountryDetails(source: RestCountryDetails) = CountryDetails(
-            id = source.code,
+            code = source.code,
             name = source.name.common,
-            nativeNames = source.name.nativeName.values.map { it.official },
+            nativeNames = source.name.nativeNames.values.map { it.official }.distinct(),
             flagUrl = source.flags.svgImageUrl,
-            region = source.subRegion ?: "",
+            subregion = source.subregion ?: "",
             capital = source.capital.first(),
             population = source.population,
             area = source.area,

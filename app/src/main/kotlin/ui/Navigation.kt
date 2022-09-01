@@ -41,8 +41,8 @@ fun FlagoramaNavHost(
         // Second level destinations
         composable("countries/{continent}") { navBackStackEntry ->
             navBackStackEntry.arguments?.getString("continent")?.let {
-                CountryListScreen(continent = it) { country ->
-                    navController.navigate("country/${country.id}")
+                CountryListScreen(regionKey = it, onDrawerClick = onDrawerClick) { country ->
+                    navController.navigate("country/${country.code}")
                 }
             }
         }

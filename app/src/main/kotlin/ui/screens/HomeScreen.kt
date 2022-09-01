@@ -28,8 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.tonyguyot.flagorama.R
-import io.github.tonyguyot.flagorama.domain.model.Continent
-import io.github.tonyguyot.flagorama.domain.model.continents
+import io.github.tonyguyot.flagorama.domain.model.Region
 import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,19 +36,19 @@ import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onDrawerClick: () -> Unit,
-    onClick: (Continent) -> Unit,
+    onClick: (Region) -> Unit,
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = { HomeTopAppBar(onDrawerClick) }
     ) { paddingValues ->
-        ContinentList(modifier = Modifier.padding(paddingValues), onClick = onClick)
+        RegionList(modifier = Modifier.padding(paddingValues), onClick = onClick)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar(onNavigationClick: () -> Unit) {
+private fun HomeTopAppBar(onNavigationClick: () -> Unit) {
     CenterAlignedTopAppBar(
         title = { Text(stringResource(id = R.string.app_name)) },
         navigationIcon = {
@@ -66,9 +65,9 @@ fun HomeTopAppBar(onNavigationClick: () -> Unit) {
 }
 
 @Composable
-fun ContinentList(
+private fun RegionList(
     modifier: Modifier = Modifier,
-    onClick: (Continent) -> Unit
+    onClick: (Region) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -82,12 +81,12 @@ fun ContinentList(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            items(items = continents) { continent ->
+            items(items = Region.all) { region ->
                 Button(
-                    onClick = { onClick(continent) },
+                    onClick = { onClick(region) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = stringResource(id = continent.nameResId))
+                    Text(text = stringResource(id = region.nameResId))
                 }
             }
         }

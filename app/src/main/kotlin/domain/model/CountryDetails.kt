@@ -16,12 +16,12 @@
 package io.github.tonyguyot.flagorama.domain.model
 
 data class CountryDetails(
-    val id: String,
+    val code: String,
     val name: String,
     val nativeNames: List<String>,
     val flagUrl: String,
     val capital: String,
-    val region: String,
+    val subregion: String,
     val population: Long,
     val area: Double,
     val independent: Boolean,

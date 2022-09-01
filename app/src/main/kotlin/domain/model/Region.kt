@@ -18,18 +18,16 @@ package io.github.tonyguyot.flagorama.domain.model
 import androidx.annotation.StringRes
 import io.github.tonyguyot.flagorama.R
 
-sealed class Continent(val key: String, @StringRes val nameResId: Int) {
-    object Africa : Continent("Africa", R.string.africa)
-    object Americas : Continent("America", R.string.americas)
-    object Asia : Continent("Asia", R.string.asia)
-    object Europe : Continent("Europe", R.string.europe)
-    object Oceania : Continent("Oceania", R.string.oceania)
-}
+sealed class Region(val key: String, @StringRes val nameResId: Int) {
+    object Africa : Region("Africa", R.string.africa)
+    object Americas : Region("Americas", R.string.americas)
+    object Asia : Region("Asia", R.string.asia)
+    object Europe : Region("Europe", R.string.europe)
+    object Oceania : Region("Oceania", R.string.oceania)
 
-val continents = listOf(
-    Continent.Africa,
-    Continent.Americas,
-    Continent.Asia,
-    Continent.Europe,
-    Continent.Oceania
-)
+    companion object {
+        val all = listOf(Africa, Americas, Asia, Europe, Oceania)
+
+        fun getByKeyOrNull(key: String): Region? = all.firstOrNull { it.key == key }
+    }
+}

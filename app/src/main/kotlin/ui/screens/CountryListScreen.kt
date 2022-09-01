@@ -17,11 +17,14 @@ package io.github.tonyguyot.flagorama.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MenuOpen
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -35,29 +38,72 @@ import coil.compose.AsyncImage
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.data.utils.Resource
 import io.github.tonyguyot.flagorama.domain.model.CountryOverview
+import io.github.tonyguyot.flagorama.domain.model.Region
+import io.github.tonyguyot.flagorama.ui.common.WaitingIndicator
 import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 import io.github.tonyguyot.flagorama.viewModel.CountryListViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryListScreen(
-    continent: String,
+    regionKey: String,
+    modifier: Modifier = Modifier,
+    onDrawerClick: () -> Unit,
+    onClick: (CountryOverview) -> Unit,
+) {
+    val regionName = Region.getByKeyOrNull(regionKey)?.let {
+        stringResource(id = it.nameResId)
+    } ?: regionKey
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = { CountryListTopAppBar(regionName, onDrawerClick) }
+    ) { paddingValues ->
+        CountryListContent(modifier = Modifier.padding(paddingValues), onClick = onClick)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CountryListTopAppBar(
+    title: String,
+    onNavigationClick: () -> Unit
+) {
+    CenterAlignedTopAppBar(
+        title = { Text(title) },
+        navigationIcon = {
+            IconButton(
+                onClick = onNavigationClick
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MenuOpen,
+                    contentDescription = stringResource(id = R.string.navigation_drawer)
+                )
+            }
+        }
+    )
+}
+
+@Composable
+private fun CountryListContent(
+    modifier: Modifier = Modifier,
     viewModel: CountryListViewModel = hiltViewModel(),
     onClick: (CountryOverview) -> Unit
 ) {
     val state by viewModel.uiState.observeAsState(Resource.loading())
     when (state.status) {
-        Resource.Status.SUCCESS -> CountryOverviewGrid(countries = state.data ?: emptyList(), onClick)
-        else -> Text("Nothing")
+        Resource.Status.SUCCESS -> CountryOverviewGrid(modifier, state.data ?: emptyList(), onClick)
+        else -> WaitingIndicator()
     }
 }
 
 @Composable
-fun CountryOverviewGrid(
+private fun CountryOverviewGrid(
+    modifier: Modifier = Modifier,
     countries: List<CountryOverview>,
     onClick: (CountryOverview) -> Unit
 ) {
     LazyVerticalGrid(
-        modifier = Modifier.padding(all = 4.dp),
+        modifier = modifier.padding(all = 4.dp),
         columns = GridCells.Adaptive(minSize = 128.dp)
     ) {
         items(countries) { country ->
@@ -67,7 +113,7 @@ fun CountryOverviewGrid(
 }
 
 @Composable
-fun CountryOverviewItem(
+private fun CountryOverviewItem(
     country: CountryOverview,
     onClick: (CountryOverview) -> Unit
 ) {
@@ -91,6 +137,6 @@ fun CountryOverviewItem(
 @Composable
 private fun DefaultPreview() {
     FlagoramaTheme {
-        CountryListScreen("Africa") {}
+        CountryListScreen("Africa", Modifier, {}) {}
     }
 }

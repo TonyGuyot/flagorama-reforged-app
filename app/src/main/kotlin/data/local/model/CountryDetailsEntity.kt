@@ -19,23 +19,23 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "country_details_table")
 data class CountryDetailsEntity(
     @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,
+    @ColumnInfo(name = "country_iso3_code")
+    val code: String,
 
     @ColumnInfo(name = "name")
     val name: String,
 
-    @ColumnInfo(name = "native_name")
-    val nativeName: String,
+    @ColumnInfo(name = "native_names")
+    val nativeNames: String,
 
     @ColumnInfo(name = "flag_url")
     val flagUrl: String,
 
-    @ColumnInfo(name = "region")
-    val region: String,
+    @ColumnInfo(name = "subregion")
+    val subregion: String,
 
     @ColumnInfo(name = "capital")
     val capital: String,

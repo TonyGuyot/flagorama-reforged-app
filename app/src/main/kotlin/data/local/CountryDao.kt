@@ -25,15 +25,15 @@ import io.github.tonyguyot.flagorama.data.local.model.CountryOverviewEntity
 @Dao
 interface CountryDao {
 
-    @Query("SELECT * FROM CountryOverviewEntity WHERE continent_key = :continentKey ORDER BY name ASC")
-    fun selectCountriesByContinent(continentKey: String): List<CountryOverviewEntity>
+    @Query("SELECT * FROM country_overview_table WHERE region_key = :regionKey ORDER BY name ASC")
+    fun selectCountriesByRegion(regionKey: String): List<CountryOverviewEntity>
 
-    @Query("SELECT * FROM CountryDetailsEntity WHERE id = :countryCode ORDER BY name ASC")
+    @Query("SELECT * FROM country_details_table WHERE country_iso3_code = :countryCode ORDER BY name ASC")
     fun selectCountryDetailsByCountryCode(countryCode: String): List<CountryDetailsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(countries: List<CountryOverviewEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCountryDetails(countryDetails: CountryDetailsEntity)
+    fun insert(countryDetails: CountryDetailsEntity)
 }

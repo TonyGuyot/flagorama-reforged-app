@@ -15,10 +15,13 @@
  */
 package io.github.tonyguyot.flagorama.data.local.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "favorite_table")
 data class FavoriteEntity(
-    @PrimaryKey val code: String
+    @PrimaryKey
+    @ColumnInfo(name = "country_iso3_code")
+    val code: String
 )

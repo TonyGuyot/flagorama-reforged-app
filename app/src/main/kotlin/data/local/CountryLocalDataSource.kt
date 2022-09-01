@@ -26,8 +26,8 @@ import io.github.tonyguyot.flagorama.domain.model.CountryOverview
  */
 class CountryLocalDataSource(private val dao: CountryDao) {
 
-    fun getCountriesByContinent(continentKey: String): List<CountryOverview> =
-        dao.selectCountriesByContinent(continentKey).map { toCountryOverview(it) }
+    fun getCountriesByContinent(regionKey: String): List<CountryOverview> =
+        dao.selectCountriesByRegion(regionKey).map { toCountryOverview(it) }
 
     fun getCountryDetails(countryCode: String): CountryDetails? =
         dao.selectCountryDetailsByCountryCode(countryCode).getOrNull(0)?.let {
@@ -45,23 +45,23 @@ class CountryLocalDataSource(private val dao: CountryDao) {
 
     fun saveCountryDetails(countryDetails: CountryDetails?) {
         if (countryDetails != null) {
-            dao.insertCountryDetails(toCountryDetailsEntity(countryDetails))
+            dao.insert(toCountryDetailsEntity(countryDetails))
         }
     }
 
     companion object Mapper {
         /** map a country database entity to a country logic object */
         fun toCountryOverview(source: CountryOverviewEntity) = CountryOverview(
-            id = source.id,
+            code = source.code,
             name = source.name,
             flagUrl = source.flagUrl,
             flag = source.flag
         )
 
         /** map a country logic object to a country database entity */
-        fun toCountryOverviewEntity(source: CountryOverview, continentKey: String) = CountryOverviewEntity(
-            id = source.id,
-            continentKey = continentKey,
+        fun toCountryOverviewEntity(source: CountryOverview, regionKey: String) = CountryOverviewEntity(
+            code = source.code,
+            regionKey = regionKey,
             name = source.name,
             flagUrl = source.flagUrl,
             flag = source.flag
@@ -69,30 +69,32 @@ class CountryLocalDataSource(private val dao: CountryDao) {
 
         /** map a country details database entity to a country details logic object */
         fun toCountryDetails(source: CountryDetailsEntity) = CountryDetails(
-            id = source.id,
+            code = source.code,
             name = source.name,
             flagUrl = source.flagUrl,
-            region = source.region,
+            subregion = source.subregion,
             capital = source.capital,
             population = source.population,
             area = source.area,
-            nativeNames = listOf(source.nativeName),
+            nativeNames = source.nativeNames.split(DELIMITER),
             independent = source.independent,
             unMember = source.unMember
         )
 
         /** map a country details logic object to a country details database entity */
         fun toCountryDetailsEntity(source: CountryDetails) = CountryDetailsEntity(
-            id = source.id,
+            code = source.code,
             name = source.name,
             flagUrl = source.flagUrl,
-            region = source.region,
+            subregion = source.subregion,
             capital = source.capital,
             population = source.population,
             area = source.area,
-            nativeName = source.nativeNames.getOrNull(0) ?: "",
+            nativeNames = source.nativeNames.joinToString(DELIMITER.toString()),
             independent = source.independent,
             unMember = source.unMember
         )
+
+        private const val DELIMITER = '|'
     }
 }

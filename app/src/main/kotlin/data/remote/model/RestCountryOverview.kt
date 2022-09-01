@@ -18,9 +18,16 @@ package io.github.tonyguyot.flagorama.data.remote.model
 import com.google.gson.annotations.SerializedName
 
 data class RestCountryOverview(
-    @field:SerializedName("cca3") val code: String,
-    @field:SerializedName("name") val name: RestCountryName,
-    @field:SerializedName("flags") val flags: RestCountryFlags,
-    @field:SerializedName("flag") val flag: String,
+    @field:SerializedName("cca3")
+    val code: String,
+
+    @field:SerializedName("name")
+    val name: RestCountryName,
+
+    @field:SerializedName("flags")
+    val flags: RestCountryFlags,
+
+    @field:SerializedName("flag")
+    val flag: String,
 )
 

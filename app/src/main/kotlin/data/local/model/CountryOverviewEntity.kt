@@ -19,11 +19,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "country_overview_table")
 data class CountryOverviewEntity(
     @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,
+    @ColumnInfo(name = "country_iso3_code")
+    val code: String,
 
     @ColumnInfo(name = "name")
     val name: String,
@@ -34,6 +34,6 @@ data class CountryOverviewEntity(
     @ColumnInfo(name = "flag")
     val flag: String,
 
-    @ColumnInfo(name = "continent_key")
-    val continentKey: String,
+    @ColumnInfo(name = "region_key")
+    val regionKey: String,
 )
