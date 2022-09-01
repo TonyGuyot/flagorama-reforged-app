@@ -15,6 +15,7 @@
  */
 package io.github.tonyguyot.flagorama.ui
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,18 +32,28 @@ fun FlagoramaNavHost(
     NavHost(navController = navController, startDestination = "home") {
         // Top level destinations
         composable("home") {
-            HomeScreen(onDrawerClick = onDrawerClick) { continent ->
-                navController.navigate("countries/${continent.key}")
+            HomeScreen(onDrawerClick = onDrawerClick) { region ->
+                navController.gotoCountryList(region.key)
             }
         }
-        composable("favorites") { }
-        composable("info") { }
+        composable("favorites") {
+            Text("Favorites")
+        }
+        composable("about") {
+            Text("About")
+        }
+        composable("source") {
+            Text("Source code")
+        }
+        composable("privacy") {
+            Text("Data privacy")
+        }
 
         // Second level destinations
-        composable("countries/{continent}") { navBackStackEntry ->
-            navBackStackEntry.arguments?.getString("continent")?.let {
+        composable("countries/{region}") { navBackStackEntry ->
+            navBackStackEntry.arguments?.getString("region")?.let {
                 CountryListScreen(regionKey = it, onDrawerClick = onDrawerClick) { country ->
-                    navController.navigate("country/${country.code}")
+                    navController.gotoCountryDetails(country.code)
                 }
             }
         }
@@ -55,3 +66,12 @@ fun FlagoramaNavHost(
         }
     }
 }
+
+fun NavHostController.gotoHome() = navigate("home")
+fun NavHostController.gotoCountryList(regionKey: String) = navigate("countries/${regionKey}")
+fun NavHostController.gotoCountryDetails(countryCode: String) = navigate("country/${countryCode}")
+fun NavHostController.gotoFavorites() = navigate("favorites")
+
+fun NavHostController.gotoAbout() = navigate("about")
+fun NavHostController.gotoSource() = navigate("source")
+fun NavHostController.gotoPrivacy() = navigate("privacy")

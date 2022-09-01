@@ -2,8 +2,15 @@
     <string name="app_name">Flagorama</string>
 
     <!-- Navigation menu -->
-    <string name="menu_global">Global</string>
+    <string name="menu_headline_flags">Flags of the world</string>
+    <string name="menu_global">World</string>
     <string name="menu_favorites">Favorites</string>
+    <string name="menu_headline_info">Information</string>
+    <string name="menu_about">About</string>
+    <string name="menu_source">Source code</string>
+    <string name="menu_privacy">Data privacy</string>
+    <string name="menu_credits">Credits</string>
+    <string name="menu_report">Report</string>
 
     <!-- Home screen -->
     <string name="africa">Africa</string>

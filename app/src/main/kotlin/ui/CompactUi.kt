@@ -15,11 +15,11 @@
  */
 package io.github.tonyguyot.flagorama.ui
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -27,7 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -45,7 +45,17 @@ fun CompactUi(navController: NavHostController) {
         drawerContent = {
             NavigationDrawerPanel(
                 selectedMenuOption = NavMenuOption.GLOBAL,
-                onDrawerClick = { scope.launch { drawerState.close() } }
+                onDrawerClick = { scope.launch { drawerState.close() } },
+                onOptionClick = { option ->
+                    when (option) {
+                        NavMenuOption.GLOBAL -> navController.gotoHome()
+                        NavMenuOption.FAVORITES -> navController.gotoFavorites()
+                        NavMenuOption.ABOUT -> navController.gotoAbout()
+                        NavMenuOption.SOURCE -> navController.gotoSource()
+                        NavMenuOption.PRIVACY -> navController.gotoPrivacy()
+                    }
+                    scope.launch { drawerState.close() }
+                }
             )
         }
     ) {
@@ -57,7 +67,7 @@ fun CompactUi(navController: NavHostController) {
 }
 
 @Composable
-fun NavigationDrawerPanel(
+private fun NavigationDrawerPanel(
     selectedMenuOption: NavMenuOption,
     modifier: Modifier = Modifier,
     onDrawerClick: () -> Unit = {},
@@ -71,23 +81,39 @@ fun NavigationDrawerPanel(
             .padding(24.dp)
     ) {
         NavigationDrawerPanelTitle(modifier, onDrawerClick)
-        NavigationDrawerPanelItem(
-            selected = selectedMenuOption == NavMenuOption.GLOBAL,
-            text = stringResource(id = R.string.menu_global),
-            icon = Icons.Default.Cloud,
-            onClick = { onOptionClick(NavMenuOption.GLOBAL) }
+        NavigationDrawerPanelHeadline(stringResource(R.string.menu_headline_flags))
+        val mainMenu = listOf(
+            Triple(NavMenuOption.GLOBAL, R.drawable.ic_action_globe, R.string.menu_global),
+            Triple(NavMenuOption.FAVORITES, R.drawable.ic_action_heart, R.string.menu_favorites)
         )
-        NavigationDrawerPanelItem(
-            selected = selectedMenuOption == NavMenuOption.FAVORITES,
-            text = stringResource(id = R.string.menu_favorites),
-            icon = Icons.Default.Favorite,
-            onClick = { onOptionClick(NavMenuOption.FAVORITES) }
+        mainMenu.forEach { item ->
+            NavigationDrawerPanelItem(
+                selected = selectedMenuOption == item.first,
+                textResId = item.third,
+                iconResId = item.second,
+                onClick = { onOptionClick(item.first) }
+            )
+        }
+        NavigationDrawerPanelDivider()
+        NavigationDrawerPanelHeadline(stringResource(R.string.menu_headline_info))
+        val infoMenu = listOf(
+            Triple(NavMenuOption.ABOUT, R.drawable.ic_action_info, R.string.menu_about),
+            Triple(NavMenuOption.SOURCE, R.drawable.ic_action_github, R.string.menu_source),
+            Triple(NavMenuOption.PRIVACY, R.drawable.ic_action_key, R.string.menu_privacy)
         )
+        infoMenu.forEach { item ->
+            NavigationDrawerPanelItem(
+                selected = selectedMenuOption == item.first,
+                textResId = item.third,
+                iconResId = item.second,
+                onClick = { onOptionClick(item.first) }
+            )
+        }
     }
 }
 
 @Composable
-fun NavigationDrawerPanelTitle(
+private fun NavigationDrawerPanelTitle(
     modifier: Modifier = Modifier,
     onDrawerClick: () -> Unit
 ) {
@@ -112,25 +138,39 @@ fun NavigationDrawerPanelTitle(
     }
 }
 
+@Composable
+fun NavigationDrawerPanelDivider() {
+    Divider(
+        modifier = Modifier.padding(8.dp),
+        color = MaterialTheme.colorScheme.primary
+    )
+}
+
+@Composable
+private fun NavigationDrawerPanelHeadline(title: String) {
+    Text(text = title, style = MaterialTheme.typography.titleMedium)
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationDrawerPanelItem(
+private fun NavigationDrawerPanelItem(
     selected: Boolean,
-    text: String,
-    icon: ImageVector,
+    @StringRes textResId: Int,
+    @DrawableRes iconResId: Int,
     onClick: () -> Unit
 ) {
+    val text = stringResource(textResId)
     NavigationDrawerItem(
         selected = selected,
         label = { Text(text = text, modifier = Modifier.padding(horizontal = 16.dp)) },
-        icon = { Icon(imageVector = icon, contentDescription = text) },
+        icon = { Icon(painter = painterResource(iconResId), contentDescription = text, tint = Color.Unspecified) },
         colors = NavigationDrawerItemDefaults.colors(unselectedContainerColor = Color.Transparent),
         onClick = onClick
     )
 }
 
 enum class NavMenuOption {
-    GLOBAL, FAVORITES
+    GLOBAL, FAVORITES, ABOUT, SOURCE, PRIVACY, /* CREDITS, REPORT */
 }
 
 @Composable
