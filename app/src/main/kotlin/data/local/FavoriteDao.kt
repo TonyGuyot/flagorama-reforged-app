@@ -16,14 +16,15 @@
 package io.github.tonyguyot.flagorama.data.local
 
 import androidx.room.*
+import io.github.tonyguyot.flagorama.data.local.model.CountryOverviewEntity
 import io.github.tonyguyot.flagorama.data.local.model.FavoriteEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteDao {
 
-    @Query("SELECT * FROM favorite_table ORDER BY country_iso3_code ASC")
-    fun selectAllFavoriteCountries(): Flow<List<FavoriteEntity>>
+    @Query("SELECT * FROM country_overview_table WHERE country_iso3_code IN (SELECT country_iso3_code FROM favorite_table) ORDER BY name ASC")
+    fun selectAllFavoriteCountries(): Flow<List<CountryOverviewEntity>>
 
     @Query("SELECT COUNT(country_iso3_code) FROM favorite_table WHERE country_iso3_code = :countryCode")
     fun isCountryFavorite(countryCode: String): Flow<Int>

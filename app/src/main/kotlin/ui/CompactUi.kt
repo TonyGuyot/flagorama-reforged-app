@@ -22,8 +22,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,13 +37,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun CompactUi(navController: NavHostController) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    var selectedMenuOption by remember { mutableStateOf(NavMenuOption.GLOBAL) }
     val scope = rememberCoroutineScope()
     
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             NavigationDrawerPanel(
-                selectedMenuOption = NavMenuOption.GLOBAL,
+                selectedMenuOption = selectedMenuOption,
                 onDrawerClick = { scope.launch { drawerState.close() } },
                 onOptionClick = { option ->
                     when (option) {
@@ -54,6 +54,7 @@ fun CompactUi(navController: NavHostController) {
                         NavMenuOption.SOURCE -> navController.gotoSource()
                         NavMenuOption.PRIVACY -> navController.gotoPrivacy()
                     }
+                    selectedMenuOption = option
                     scope.launch { drawerState.close() }
                 }
             )

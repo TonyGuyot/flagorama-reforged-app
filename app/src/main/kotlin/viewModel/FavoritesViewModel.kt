@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tonyguyot.flagorama.domain.repositories
+package io.github.tonyguyot.flagorama.viewModel
 
-import io.github.tonyguyot.flagorama.domain.model.CountryOverview
-import kotlinx.coroutines.flow.Flow
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.tonyguyot.flagorama.domain.repositories.FavoriteRepository
+import javax.inject.Inject
 
-interface FavoriteRepository {
-    fun observeFavoriteCountries(): Flow<List<CountryOverview>>
-    fun observeCountryFavoriteStatus(countryCode: String): Flow<Boolean>
-
-    suspend fun setAsFavorite(countryCode: String, favorite: Boolean)
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(
+    repository: FavoriteRepository
+): ViewModel() {
+    val uiState = repository.observeFavoriteCountries()
 }

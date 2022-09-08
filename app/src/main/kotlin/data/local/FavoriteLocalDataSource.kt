@@ -16,14 +16,15 @@
 package io.github.tonyguyot.flagorama.data.local
 
 import io.github.tonyguyot.flagorama.data.local.model.FavoriteEntity
+import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class FavoriteLocalDataSource(private val dao: FavoriteDao) {
 
-    fun getAllFavoriteCountryCodes(): Flow<List<String>> =
+    fun getAllFavoriteCountries(): Flow<List<CountryOverview>> =
         dao.selectAllFavoriteCountries().map { favorites ->
-            favorites.map { it.code }
+            favorites.map { CountryLocalDataSource.toCountryOverview(it) }
         }
 
     fun isFavorite(countryCode: String): Flow<Boolean> =

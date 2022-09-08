@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.github.tonyguyot.flagorama.ui.screens.CountryDetailsScreen
 import io.github.tonyguyot.flagorama.ui.screens.CountryListScreen
+import io.github.tonyguyot.flagorama.ui.screens.FavoritesScreen
 import io.github.tonyguyot.flagorama.ui.screens.HomeScreen
 
 @Composable
@@ -37,7 +38,9 @@ fun FlagoramaNavHost(
             }
         }
         composable("favorites") {
-            Text("Favorites")
+            FavoritesScreen(onDrawerClick = onDrawerClick) { country ->
+                navController.gotoCountryDetails(country.code)
+            }
         }
         composable("about") {
             Text("About")

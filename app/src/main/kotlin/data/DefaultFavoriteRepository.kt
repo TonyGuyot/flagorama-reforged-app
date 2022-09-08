@@ -16,6 +16,7 @@
 package io.github.tonyguyot.flagorama.data
 
 import io.github.tonyguyot.flagorama.data.local.FavoriteLocalDataSource
+import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 import io.github.tonyguyot.flagorama.domain.repositories.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -23,8 +24,8 @@ import javax.inject.Inject
 class DefaultFavoriteRepository @Inject constructor(
     private val local: FavoriteLocalDataSource
 ) : FavoriteRepository {
-    override fun observeFavoriteCountryCodes(): Flow<List<String>> {
-        return local.getAllFavoriteCountryCodes()
+    override fun observeFavoriteCountries(): Flow<List<CountryOverview>> {
+        return local.getAllFavoriteCountries()
     }
 
     override fun observeCountryFavoriteStatus(countryCode: String): Flow<Boolean> {
