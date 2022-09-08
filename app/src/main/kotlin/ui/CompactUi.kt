@@ -84,7 +84,7 @@ private fun NavigationDrawerPanel(
         NavigationDrawerPanelHeadline(stringResource(R.string.menu_headline_flags))
         val mainMenu = listOf(
             Triple(NavMenuOption.GLOBAL, R.drawable.ic_action_globe, R.string.menu_global),
-            Triple(NavMenuOption.FAVORITES, R.drawable.ic_action_heart, R.string.menu_favorites)
+            Triple(NavMenuOption.FAVORITES, R.drawable.ic_action_fav_on, R.string.menu_favorites)
         )
         mainMenu.forEach { item ->
             NavigationDrawerPanelItem(
@@ -139,7 +139,7 @@ private fun NavigationDrawerPanelTitle(
 }
 
 @Composable
-fun NavigationDrawerPanelDivider() {
+private fun NavigationDrawerPanelDivider() {
     Divider(
         modifier = Modifier.padding(8.dp),
         color = MaterialTheme.colorScheme.primary

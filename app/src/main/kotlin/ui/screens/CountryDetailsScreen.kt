@@ -19,14 +19,17 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MenuOpen
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,22 +42,79 @@ import io.github.tonyguyot.flagorama.ui.common.WaitingIndicator
 import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 import io.github.tonyguyot.flagorama.viewModel.CountryDetailsViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryDetailsScreen(
-    country: String,
-    viewModel: CountryDetailsViewModel = hiltViewModel()
+    countryCode: String,
+    modifier: Modifier = Modifier,
+    viewModel: CountryDetailsViewModel = hiltViewModel(),
+    onDrawerClick: () -> Unit
+) {
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = { CountryDetailsTopAppBar(countryCode, viewModel, onDrawerClick) }
+    ) { paddingValues ->
+        CountryDetailsContent(Modifier.padding(paddingValues), viewModel)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CountryDetailsTopAppBar(
+    title: String,
+    viewModel: CountryDetailsViewModel,
+    onNavigationClick: () -> Unit
+) {
+    val isFavoriteState by viewModel.favoriteState.collectAsState(false)
+    CenterAlignedTopAppBar(
+        title = { Text(title) },
+        navigationIcon = {
+            IconButton(
+                onClick = onNavigationClick
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MenuOpen,
+                    contentDescription = stringResource(R.string.navigation_drawer)
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = {
+                    viewModel.setAsFavorite(!isFavoriteState)
+                }
+            ) {
+                val descriptionResId = if (isFavoriteState) R.string.menu_fav_set_off else R.string.menu_fav_set_on
+                val iconResId = if (isFavoriteState) R.drawable.ic_action_fav_on else R.drawable.ic_action_fav_off
+                Icon(
+                    painter = painterResource(iconResId),
+                    contentDescription = stringResource(descriptionResId),
+                    tint = Color.Unspecified
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun CountryDetailsContent(
+    modifier: Modifier = Modifier,
+    viewModel: CountryDetailsViewModel
 ) {
     val state by viewModel.uiState.observeAsState(Resource.loading())
     when (state.status) {
-        Resource.Status.SUCCESS -> state.data?.let { CountryDetails(country = it) }
+        Resource.Status.SUCCESS -> state.data?.let { CountryDetails(modifier, it) }
         else -> WaitingIndicator()
     }
 }
 
 @Composable
-private fun CountryDetails(country: CountryDetails) {
+private fun CountryDetails(
+    modifier: Modifier = Modifier,
+    country: CountryDetails
+) {
     Column(
-        modifier = Modifier.padding(all = 4.dp),
+        modifier = modifier.padding(all = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CountryFlag(country.flagUrl, country.name)
@@ -133,6 +193,6 @@ fun RowScope.TableCell(
 @Composable
 private fun DefaultPreview() {
     FlagoramaTheme {
-        CountryDetailsScreen("FRA")
+        CountryDetailsScreen("FRA") {}
     }
 }

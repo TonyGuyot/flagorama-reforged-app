@@ -19,6 +19,10 @@
     <string name="europe">Europe</string>
     <string name="oceania">Oceania</string>
 
+    <!-- Details screen -->
+    <string name="menu_fav_set_on">Set this country as favorite</string>
+    <string name="menu_fav_set_off">Remove this country from favorites</string>
+
     <!-- Accessibility -->
     <string name="navigation_drawer">Navigation drawer</string>
     <string name="flag_description">Flag of %s</string>

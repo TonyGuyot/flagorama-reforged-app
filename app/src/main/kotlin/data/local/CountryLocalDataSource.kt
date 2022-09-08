@@ -21,12 +21,12 @@ import io.github.tonyguyot.flagorama.domain.model.CountryDetails
 import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 
 /**
- * Provide a abstraction to the local cache.
+ * Provide an abstraction to the local cache.
  * Perform read/write operations to the local cache and conversions to business logic objects.
  */
 class CountryLocalDataSource(private val dao: CountryDao) {
 
-    fun getCountriesByContinent(regionKey: String): List<CountryOverview> =
+    fun getCountriesByRegion(regionKey: String): List<CountryOverview> =
         dao.selectCountriesByRegion(regionKey).map { toCountryOverview(it) }
 
     fun getCountryDetails(countryCode: String): CountryDetails? =

@@ -17,15 +17,26 @@ package io.github.tonyguyot.flagorama.viewModel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.tonyguyot.flagorama.data.CountryRepository
+import io.github.tonyguyot.flagorama.domain.repositories.CountryRepository
+import io.github.tonyguyot.flagorama.domain.repositories.FavoriteRepository
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CountryDetailsViewModel @Inject constructor(
-    private val repository: CountryRepository,
-    private val savedStateHandle: SavedStateHandle
+    countryRepository: CountryRepository,
+    private val favoriteRepository: FavoriteRepository,
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    private val countryCode: String = savedStateHandle["code"]!!
-    val uiState = repository.observeCountryDetails(countryCode)
+    private val countryCode: String = checkNotNull(savedStateHandle["code"])
+    val uiState = countryRepository.observeCountryDetails(countryCode)
+    val favoriteState = favoriteRepository.observeCountryFavoriteStatus(countryCode)
+
+    fun setAsFavorite(favorite: Boolean) {
+        viewModelScope.launch {
+            favoriteRepository.setAsFavorite(countryCode, favorite)
+        }
+    }
 }

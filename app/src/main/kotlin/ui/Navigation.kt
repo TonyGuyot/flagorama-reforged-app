@@ -61,7 +61,7 @@ fun FlagoramaNavHost(
         // Third level destinations
         composable("country/{code}") { navBackStackEntry ->
             navBackStackEntry.arguments?.getString("code")?.let {
-                CountryDetailsScreen(country = it)
+                CountryDetailsScreen(countryCode = it, onDrawerClick = onDrawerClick)
             }
         }
     }

@@ -15,23 +15,26 @@
  */
 package io.github.tonyguyot.flagorama.data.local
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import io.github.tonyguyot.flagorama.data.local.model.CountryDetailsEntity
-import io.github.tonyguyot.flagorama.data.local.model.CountryOverviewEntity
 import io.github.tonyguyot.flagorama.data.local.model.FavoriteEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-@Database(
-    entities = [CountryOverviewEntity::class, CountryDetailsEntity::class, FavoriteEntity::class],
-    version = AppDatabase.VERSION,
-    exportSchema = false
-)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun countryDao(): CountryDao
-    abstract fun favoriteDao(): FavoriteDao
+class FavoriteLocalDataSource(private val dao: FavoriteDao) {
 
-    companion object {
-        const val NAME = "Flagorama.db"
-        const val VERSION = 1
+    fun getAllFavoriteCountryCodes(): Flow<List<String>> =
+        dao.selectAllFavoriteCountries().map { favorites ->
+            favorites.map { it.code }
+        }
+
+    fun isFavorite(countryCode: String): Flow<Boolean> =
+        dao.isCountryFavorite(countryCode).map { it > 0 }
+
+    suspend fun setAsFavorite(countryCode: String, favorite: Boolean) {
+        val favoriteEntity = FavoriteEntity(countryCode)
+        if (favorite) {
+            dao.insert(favoriteEntity)
+        } else {
+            dao.delete(favoriteEntity)
+        }
     }
 }

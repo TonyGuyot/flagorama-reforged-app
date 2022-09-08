@@ -24,12 +24,15 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.tonyguyot.flagorama.BuildConfig
-import io.github.tonyguyot.flagorama.data.CountryRepository
+import io.github.tonyguyot.flagorama.domain.repositories.CountryRepository
 import io.github.tonyguyot.flagorama.data.DefaultCountryRepository
+import io.github.tonyguyot.flagorama.data.DefaultFavoriteRepository
 import io.github.tonyguyot.flagorama.data.local.AppDatabase
 import io.github.tonyguyot.flagorama.data.local.CountryLocalDataSource
+import io.github.tonyguyot.flagorama.data.local.FavoriteLocalDataSource
 import io.github.tonyguyot.flagorama.data.remote.CountryRemoteDataSource
 import io.github.tonyguyot.flagorama.data.remote.RestCountriesService
+import io.github.tonyguyot.flagorama.domain.repositories.FavoriteRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -51,8 +54,22 @@ object FlagoramaModule {
 
     @Singleton
     @Provides
+    fun provideFavoriteRepository(
+        local: FavoriteLocalDataSource
+    ): FavoriteRepository {
+        return DefaultFavoriteRepository(local)
+    }
+
+    @Singleton
+    @Provides
     fun provideCountryLocalDataSource(database: AppDatabase): CountryLocalDataSource {
         return CountryLocalDataSource(database.countryDao())
+    }
+
+    @Singleton
+    @Provides
+    fun provideFavoriteLocalDataSource(database: AppDatabase): FavoriteLocalDataSource {
+        return FavoriteLocalDataSource(database.favoriteDao())
     }
 
     @Singleton
@@ -103,7 +120,7 @@ object FlagoramaModule {
         return Room.databaseBuilder(
             context.applicationContext,
             AppDatabase::class.java,
-            "Flagorama.db"
+            AppDatabase.NAME
         ).build()
     }
 }

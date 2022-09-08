@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tonyguyot.flagorama.data
+package io.github.tonyguyot.flagorama.domain.repositories
 
 import androidx.lifecycle.LiveData
 import io.github.tonyguyot.flagorama.data.utils.Resource
@@ -21,6 +21,6 @@ import io.github.tonyguyot.flagorama.domain.model.CountryDetails
 import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 
 interface CountryRepository {
-    fun observeCountriesByContinent(continentKey: String): LiveData<Resource<List<CountryOverview>>>
+    fun observeCountriesByRegion(regionKey: String): LiveData<Resource<List<CountryOverview>>>
     fun observeCountryDetails(countryCode: String): LiveData<Resource<CountryDetails?>>
 }

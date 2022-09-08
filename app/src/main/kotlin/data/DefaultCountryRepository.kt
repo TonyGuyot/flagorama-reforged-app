@@ -18,18 +18,19 @@ package io.github.tonyguyot.flagorama.data
 import io.github.tonyguyot.flagorama.data.local.CountryLocalDataSource
 import io.github.tonyguyot.flagorama.data.remote.CountryRemoteDataSource
 import io.github.tonyguyot.flagorama.data.utils.DatabaseFirstStrategy
+import io.github.tonyguyot.flagorama.domain.repositories.CountryRepository
 import javax.inject.Inject
 
 class DefaultCountryRepository @Inject constructor(
     private val local: CountryLocalDataSource,
     private val remote: CountryRemoteDataSource
 ) : CountryRepository {
-    override fun observeCountriesByContinent(continentKey: String) =
+    override fun observeCountriesByRegion(regionKey: String) =
         DatabaseFirstStrategy.getResultAsLiveData(
-            databaseQuery = { local.getCountriesByContinent(continentKey) },
+            databaseQuery = { local.getCountriesByRegion(regionKey) },
             shouldFetch = { it.isEmpty() },
-            networkCall = { remote.fetchCountries(continentKey) },
-            saveCallResult = { local.saveCountries(it, continentKey) }
+            networkCall = { remote.fetchCountries(regionKey) },
+            saveCallResult = { local.saveCountries(it, regionKey) }
         )
 
     override fun observeCountryDetails(countryCode: String) =
