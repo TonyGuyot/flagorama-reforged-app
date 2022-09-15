@@ -18,8 +18,6 @@ package io.github.tonyguyot.flagorama.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MenuOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.domain.model.Region
+import io.github.tonyguyot.flagorama.ui.common.TopLevelAppBar
 import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,28 +39,10 @@ fun HomeScreen(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = { HomeTopAppBar(onDrawerClick) }
+        topBar = { TopLevelAppBar(stringResource(R.string.app_name), onDrawerClick) }
     ) { paddingValues ->
         RegionList(modifier = Modifier.padding(paddingValues), onClick = onClick)
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun HomeTopAppBar(onNavigationClick: () -> Unit) {
-    CenterAlignedTopAppBar(
-        title = { Text(stringResource(id = R.string.app_name)) },
-        navigationIcon = {
-            IconButton(
-                onClick = onNavigationClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.MenuOpen,
-                    contentDescription = stringResource(id = R.string.navigation_drawer)
-                )
-            }
-        }
-    )
 }
 
 @Composable

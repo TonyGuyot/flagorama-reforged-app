@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MenuOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -48,7 +49,7 @@ import io.github.tonyguyot.flagorama.viewModel.CountryListViewModel
 fun CountryListScreen(
     regionKey: String,
     modifier: Modifier = Modifier,
-    onDrawerClick: () -> Unit,
+    onBackClick: () -> Unit,
     onClick: (CountryOverview) -> Unit,
 ) {
     val regionName = Region.getByKeyOrNull(regionKey)?.let {
@@ -56,7 +57,7 @@ fun CountryListScreen(
     } ?: regionKey
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = { CountryListTopAppBar(regionName, onDrawerClick) }
+        topBar = { CountryListTopAppBar(regionName, onBackClick) }
     ) { paddingValues ->
         CountryListContent(modifier = Modifier.padding(paddingValues), onClick = onClick)
     }
@@ -75,8 +76,8 @@ private fun CountryListTopAppBar(
                 onClick = onNavigationClick
             ) {
                 Icon(
-                    imageVector = Icons.Default.MenuOpen,
-                    contentDescription = stringResource(id = R.string.navigation_drawer)
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(id = R.string.up_arrow_description)
                 )
             }
         }

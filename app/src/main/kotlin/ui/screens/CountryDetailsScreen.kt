@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MenuOpen
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -48,11 +48,11 @@ fun CountryDetailsScreen(
     countryCode: String,
     modifier: Modifier = Modifier,
     viewModel: CountryDetailsViewModel = hiltViewModel(),
-    onDrawerClick: () -> Unit
+    onBackClick: () -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = { CountryDetailsTopAppBar(countryCode, viewModel, onDrawerClick) }
+        topBar = { CountryDetailsTopAppBar(countryCode, viewModel, onBackClick) }
     ) { paddingValues ->
         CountryDetailsContent(Modifier.padding(paddingValues), viewModel)
     }
@@ -73,8 +73,8 @@ private fun CountryDetailsTopAppBar(
                 onClick = onNavigationClick
             ) {
                 Icon(
-                    imageVector = Icons.Default.MenuOpen,
-                    contentDescription = stringResource(R.string.navigation_drawer)
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(R.string.up_arrow_description)
                 )
             }
         },

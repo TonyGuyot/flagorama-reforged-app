@@ -133,7 +133,7 @@ private fun NavigationDrawerPanelTitle(
         IconButton(onClick = onDrawerClick) {
             Icon(
                 imageVector = Icons.Default.Menu,
-                contentDescription = stringResource(id = R.string.navigation_drawer)
+                contentDescription = stringResource(id = R.string.close_drawer_description)
             )
         }
     }

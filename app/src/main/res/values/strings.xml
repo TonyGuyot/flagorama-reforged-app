@@ -24,6 +24,8 @@
     <string name="menu_fav_set_off">Remove this country from favorites</string>
 
     <!-- Accessibility -->
-    <string name="navigation_drawer">Navigation drawer</string>
+    <string name="open_drawer_description">Open navigation drawer</string>
+    <string name="close_drawer_description">Close navigation drawer</string>
+    <string name="up_arrow_description">Go back</string>
     <string name="flag_description">Flag of %s</string>
 </resources>

@@ -54,27 +54,37 @@ fun FlagoramaNavHost(
 
         // Second level destinations
         composable("countries/{region}") { navBackStackEntry ->
-            navBackStackEntry.arguments?.getString("region")?.let {
-                CountryListScreen(regionKey = it, onDrawerClick = onDrawerClick) { country ->
-                    navController.gotoCountryDetails(country.code)
-                }
+            navBackStackEntry.arguments?.getString("region")?.let { regionKey ->
+                CountryListScreen(
+                    regionKey = regionKey,
+                    onBackClick = { navController.popBackStack() },
+                    onClick = { country -> navController.gotoCountryDetails(country.code) }
+                )
             }
         }
 
         // Third level destinations
         composable("country/{code}") { navBackStackEntry ->
-            navBackStackEntry.arguments?.getString("code")?.let {
-                CountryDetailsScreen(countryCode = it, onDrawerClick = onDrawerClick)
+            navBackStackEntry.arguments?.getString("code")?.let { countryCode ->
+                CountryDetailsScreen(countryCode = countryCode) {
+                    navController.popBackStack()
+                }
             }
         }
     }
 }
 
-fun NavHostController.gotoHome() = navigate("home")
+fun NavHostController.gotoHome() = navigateFirstLevel("home")
 fun NavHostController.gotoCountryList(regionKey: String) = navigate("countries/${regionKey}")
 fun NavHostController.gotoCountryDetails(countryCode: String) = navigate("country/${countryCode}")
-fun NavHostController.gotoFavorites() = navigate("favorites")
 
-fun NavHostController.gotoAbout() = navigate("about")
-fun NavHostController.gotoSource() = navigate("source")
-fun NavHostController.gotoPrivacy() = navigate("privacy")
+fun NavHostController.gotoFavorites() = navigateFirstLevel("favorites")
+fun NavHostController.gotoAbout() = navigateFirstLevel("about")
+fun NavHostController.gotoSource() = navigateFirstLevel("source")
+fun NavHostController.gotoPrivacy() = navigateFirstLevel("privacy")
+
+private fun NavHostController.navigateFirstLevel(route: String) {
+    navigate(route) {
+        popUpTo(0)
+    }
+}

@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MenuOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.domain.model.CountryOverview
+import io.github.tonyguyot.flagorama.ui.common.TopLevelAppBar
 import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 import io.github.tonyguyot.flagorama.viewModel.FavoritesViewModel
 
@@ -49,32 +48,10 @@ fun FavoritesScreen(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = { CountryListTopAppBar(stringResource(R.string.menu_favorites), onDrawerClick) }
+        topBar = { TopLevelAppBar(stringResource(R.string.menu_favorites), onDrawerClick) }
     ) { paddingValues ->
         FavoriteCountryListContent(modifier = Modifier.padding(paddingValues), onClick = onClick)
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-// TODO: put in common
-private fun CountryListTopAppBar(
-    title: String,
-    onNavigationClick: () -> Unit
-) {
-    CenterAlignedTopAppBar(
-        title = { Text(title) },
-        navigationIcon = {
-            IconButton(
-                onClick = onNavigationClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.MenuOpen,
-                    contentDescription = stringResource(id = R.string.navigation_drawer)
-                )
-            }
-        }
-    )
 }
 
 @Composable
