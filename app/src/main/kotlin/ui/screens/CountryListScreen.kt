@@ -24,7 +24,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MenuOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,6 +39,7 @@ import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.data.utils.Resource
 import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 import io.github.tonyguyot.flagorama.domain.model.Region
+import io.github.tonyguyot.flagorama.ui.common.ErrorMessage
 import io.github.tonyguyot.flagorama.ui.common.WaitingIndicator
 import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 import io.github.tonyguyot.flagorama.viewModel.CountryListViewModel
@@ -93,7 +93,8 @@ private fun CountryListContent(
     val state by viewModel.uiState.observeAsState(Resource.loading())
     when (state.status) {
         Resource.Status.SUCCESS -> CountryOverviewGrid(modifier, state.data ?: emptyList(), onClick)
-        else -> WaitingIndicator()
+        Resource.Status.ERROR -> ErrorMessage(modifier)
+        Resource.Status.LOADING -> WaitingIndicator(modifier)
     }
 }
 

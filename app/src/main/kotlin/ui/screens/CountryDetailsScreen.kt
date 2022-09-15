@@ -38,6 +38,7 @@ import coil.compose.AsyncImage
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.data.utils.Resource
 import io.github.tonyguyot.flagorama.domain.model.CountryDetails
+import io.github.tonyguyot.flagorama.ui.common.ErrorMessage
 import io.github.tonyguyot.flagorama.ui.common.WaitingIndicator
 import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
 import io.github.tonyguyot.flagorama.viewModel.CountryDetailsViewModel
@@ -104,7 +105,8 @@ fun CountryDetailsContent(
     val state by viewModel.uiState.observeAsState(Resource.loading())
     when (state.status) {
         Resource.Status.SUCCESS -> state.data?.let { CountryDetails(modifier, it) }
-        else -> WaitingIndicator()
+        Resource.Status.ERROR -> ErrorMessage(modifier)
+        Resource.Status.LOADING -> WaitingIndicator(modifier)
     }
 }
 
