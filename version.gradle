@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.ajoberstar.grgit:grgit-core:$grgit_version"
+    }
+}
+
+import org.ajoberstar.grgit.Grgit
+ext {
+    git = Grgit.open(currentDir: projectDir)
+    gitVersionName = versionTag + "." + getNumberOfCommits(git) + getDirtyIndicator(git)
+    gitVersionCode = getNumberOfCommits(git)
+}
+
+// count the number of commits in the branch,
+// this is the same as 'git rev-list --count HEAD'
+private static def getNumberOfCommits(git) {
+    return git.log().size()
+}
+
+// return 'X' if there are unchecked files
+private static def getDirtyIndicator(git) {
+    if (git.status().clean)
+        return ''
+    return 'X'
+}
+
+task printVersion() {
+    println("Version Name: $gitVersionName")
+    println("Version Code: $gitVersionCode")
+}
