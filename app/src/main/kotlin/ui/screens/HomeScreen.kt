@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.domain.model.Region
 import io.github.tonyguyot.flagorama.ui.common.TopLevelAppBar
-import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
+import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +78,7 @@ private fun RegionList(
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    FlagoramaTheme {
+    AppTheme {
         HomeScreen(onDrawerClick = { }) { }
     }
 }

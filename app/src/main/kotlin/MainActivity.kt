@@ -23,7 +23,7 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.tonyguyot.flagorama.ui.MainUi
-import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
+import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            FlagoramaTheme {
+            AppTheme {
                 val windowSize = calculateWindowSizeClass(this)
                 MainUi(windowSize = windowSize.widthSizeClass, navController = navController)
             }

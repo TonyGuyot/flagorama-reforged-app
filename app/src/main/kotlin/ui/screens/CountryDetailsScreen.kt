@@ -40,7 +40,7 @@ import io.github.tonyguyot.flagorama.data.utils.Resource
 import io.github.tonyguyot.flagorama.domain.model.CountryDetails
 import io.github.tonyguyot.flagorama.ui.common.ErrorMessage
 import io.github.tonyguyot.flagorama.ui.common.WaitingIndicator
-import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
+import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 import io.github.tonyguyot.flagorama.viewModel.CountryDetailsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -194,7 +194,7 @@ fun RowScope.TableCell(
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    FlagoramaTheme {
+    AppTheme {
         CountryDetailsScreen("FRA") {}
     }
 }

@@ -13,43 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tonyguyot.flagorama.ui
+package io.github.tonyguyot.flagorama.ui.navigation
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import io.github.tonyguyot.flagorama.ui.screens.CountryDetailsScreen
-import io.github.tonyguyot.flagorama.ui.screens.CountryListScreen
-import io.github.tonyguyot.flagorama.ui.screens.FavoritesScreen
-import io.github.tonyguyot.flagorama.ui.screens.HomeScreen
+import io.github.tonyguyot.flagorama.ui.screens.*
 
 @Composable
-fun FlagoramaNavHost(
+fun AppNavHost(
     navController: NavHostController,
     onDrawerClick: () -> Unit
 ) {
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = Destination.Home.route) {
         // Top level destinations
-        composable("home") {
+        composable(Destination.Home.route) {
             HomeScreen(onDrawerClick = onDrawerClick) { region ->
                 navController.gotoCountryList(region.key)
             }
         }
-        composable("favorites") {
+        composable(Destination.Favorites.route) {
             FavoritesScreen(onDrawerClick = onDrawerClick) { country ->
                 navController.gotoCountryDetails(country.code)
             }
         }
-        composable("about") {
-            Text("About")
+        composable(Destination.About.route) {
+            AboutScreen(onOpenDrawerClick = onDrawerClick)
         }
-        composable("source") {
-            Text("Source code")
+        composable(Destination.Source.route) {
+            SourceScreen(onOpenDrawerClick = onDrawerClick)
         }
-        composable("privacy") {
-            Text("Data privacy")
+        composable(Destination.Privacy.route) {
+            PrivacyScreen(onOpenDrawerClick = onDrawerClick)
         }
 
         // Second level destinations

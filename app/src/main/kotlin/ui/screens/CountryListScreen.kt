@@ -41,7 +41,7 @@ import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 import io.github.tonyguyot.flagorama.domain.model.Region
 import io.github.tonyguyot.flagorama.ui.common.ErrorMessage
 import io.github.tonyguyot.flagorama.ui.common.WaitingIndicator
-import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
+import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 import io.github.tonyguyot.flagorama.viewModel.CountryListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -138,7 +138,7 @@ private fun CountryOverviewItem(
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    FlagoramaTheme {
+    AppTheme {
         CountryListScreen("Africa", Modifier, {}) {}
     }
 }

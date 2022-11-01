@@ -36,7 +36,7 @@ import coil.compose.AsyncImage
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 import io.github.tonyguyot.flagorama.ui.common.TopLevelAppBar
-import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
+import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 import io.github.tonyguyot.flagorama.viewModel.FavoritesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,7 +104,7 @@ private fun CountryOverviewItem(
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    FlagoramaTheme {
+    AppTheme {
         FavoritesScreen(Modifier, {}) {}
     }
 }

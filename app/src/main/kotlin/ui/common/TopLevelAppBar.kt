@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.github.tonyguyot.flagorama.R
-import io.github.tonyguyot.flagorama.ui.theme.FlagoramaTheme
+import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +45,7 @@ fun TopLevelAppBar(title: String, onNavigationClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    FlagoramaTheme {
+    AppTheme {
         TopLevelAppBar("Flagorama") { }
     }
 }

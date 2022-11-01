@@ -15,46 +15,74 @@
  */
 package io.github.tonyguyot.flagorama.ui
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import io.github.tonyguyot.flagorama.R
+import io.github.tonyguyot.flagorama.ui.common.NavigationDrawerPanel
+import io.github.tonyguyot.flagorama.ui.common.PanelItemData
+import io.github.tonyguyot.flagorama.ui.common.PanelSectionData
+import io.github.tonyguyot.flagorama.ui.navigation.AppNavHost
+import io.github.tonyguyot.flagorama.ui.navigation.Destination
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompactUi(navController: NavHostController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    var selectedMenuOption by remember { mutableStateOf(NavMenuOption.GLOBAL) }
     val scope = rememberCoroutineScope()
-    
+
+    val sections = listOf(
+        PanelSectionData(
+            titleRes = R.string.menu_headline_flags,
+            items = listOf(
+                PanelItemData(
+                    textRes = R.string.menu_global,
+                    iconRes = R.drawable.ic_action_globe,
+                    destination = Destination.Home
+                ),
+                PanelItemData(
+                    textRes = R.string.menu_favorites,
+                    iconRes = R.drawable.ic_action_fav_on,
+                    destination = Destination.Favorites,
+                )
+            )
+        ),
+        PanelSectionData(
+            titleRes = R.string.menu_headline_info,
+            items = listOf(
+                PanelItemData(
+                    textRes = R.string.menu_about,
+                    iconRes = R.drawable.ic_action_info,
+                    destination = Destination.About
+                ),
+                PanelItemData(
+                    textRes = R.string.menu_source,
+                    iconRes = R.drawable.ic_action_github,
+                    destination = Destination.Source
+                ),
+                PanelItemData(
+                    textRes = R.string.menu_privacy,
+                    iconRes = R.drawable.ic_action_key,
+                    destination = Destination.Privacy
+                )
+            )
+        )
+    )
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             NavigationDrawerPanel(
-                selectedMenuOption = selectedMenuOption,
-                onDrawerClick = { scope.launch { drawerState.close() } },
+                sections = sections,
+                currentRoute = navBackStackEntry?.destination?.route,
+                onCloseDrawerClick = { scope.launch { drawerState.close() } },
                 onOptionClick = { option ->
-                    when (option) {
-                        NavMenuOption.GLOBAL -> navController.gotoHome()
-                        NavMenuOption.FAVORITES -> navController.gotoFavorites()
-                        NavMenuOption.ABOUT -> navController.gotoAbout()
-                        NavMenuOption.SOURCE -> navController.gotoSource()
-                        NavMenuOption.PRIVACY -> navController.gotoPrivacy()
-                    }
-                    selectedMenuOption = option
+                    navController.navigate(option.destination.route)
                     scope.launch { drawerState.close() }
                 }
             )
@@ -68,113 +96,6 @@ fun CompactUi(navController: NavHostController) {
 }
 
 @Composable
-private fun NavigationDrawerPanel(
-    selectedMenuOption: NavMenuOption,
-    modifier: Modifier = Modifier,
-    onDrawerClick: () -> Unit = {},
-    onOptionClick: (NavMenuOption) -> Unit = {}
-) {
-    Column(
-        modifier = modifier
-            .wrapContentWidth()
-            .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.inverseOnSurface)
-            .padding(24.dp)
-    ) {
-        NavigationDrawerPanelTitle(modifier, onDrawerClick)
-        NavigationDrawerPanelHeadline(stringResource(R.string.menu_headline_flags))
-        val mainMenu = listOf(
-            Triple(NavMenuOption.GLOBAL, R.drawable.ic_action_globe, R.string.menu_global),
-            Triple(NavMenuOption.FAVORITES, R.drawable.ic_action_fav_on, R.string.menu_favorites)
-        )
-        mainMenu.forEach { item ->
-            NavigationDrawerPanelItem(
-                selected = selectedMenuOption == item.first,
-                textResId = item.third,
-                iconResId = item.second,
-                onClick = { onOptionClick(item.first) }
-            )
-        }
-        NavigationDrawerPanelDivider()
-        NavigationDrawerPanelHeadline(stringResource(R.string.menu_headline_info))
-        val infoMenu = listOf(
-            Triple(NavMenuOption.ABOUT, R.drawable.ic_action_info, R.string.menu_about),
-            Triple(NavMenuOption.SOURCE, R.drawable.ic_action_github, R.string.menu_source),
-            Triple(NavMenuOption.PRIVACY, R.drawable.ic_action_key, R.string.menu_privacy)
-        )
-        infoMenu.forEach { item ->
-            NavigationDrawerPanelItem(
-                selected = selectedMenuOption == item.first,
-                textResId = item.third,
-                iconResId = item.second,
-                onClick = { onOptionClick(item.first) }
-            )
-        }
-    }
-}
-
-@Composable
-private fun NavigationDrawerPanelTitle(
-    modifier: Modifier = Modifier,
-    onDrawerClick: () -> Unit
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(id = R.string.app_name).uppercase(),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        IconButton(onClick = onDrawerClick) {
-            Icon(
-                imageVector = Icons.Default.Menu,
-                contentDescription = stringResource(id = R.string.close_drawer_description)
-            )
-        }
-    }
-}
-
-@Composable
-private fun NavigationDrawerPanelDivider() {
-    Divider(
-        modifier = Modifier.padding(8.dp),
-        color = MaterialTheme.colorScheme.primary
-    )
-}
-
-@Composable
-private fun NavigationDrawerPanelHeadline(title: String) {
-    Text(text = title, style = MaterialTheme.typography.titleMedium)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun NavigationDrawerPanelItem(
-    selected: Boolean,
-    @StringRes textResId: Int,
-    @DrawableRes iconResId: Int,
-    onClick: () -> Unit
-) {
-    val text = stringResource(textResId)
-    NavigationDrawerItem(
-        selected = selected,
-        label = { Text(text = text, modifier = Modifier.padding(horizontal = 16.dp)) },
-        icon = { Icon(painter = painterResource(iconResId), contentDescription = text, tint = Color.Unspecified) },
-        colors = NavigationDrawerItemDefaults.colors(unselectedContainerColor = Color.Transparent),
-        onClick = onClick
-    )
-}
-
-enum class NavMenuOption {
-    GLOBAL, FAVORITES, ABOUT, SOURCE, PRIVACY, /* CREDITS, REPORT */
-}
-
-@Composable
 fun MainContent(
     navController: NavHostController,
     onDrawerClick: () -> Unit
@@ -183,6 +104,6 @@ fun MainContent(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        FlagoramaNavHost(navController = navController, onDrawerClick = onDrawerClick)
+        AppNavHost(navController = navController, onDrawerClick = onDrawerClick)
     }
 }
