@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.ui.navigation.Destination
+import io.github.tonyguyot.flagorama.ui.theme.monofettFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,6 +65,7 @@ fun NavigationDrawerPanel(
                         selected = currentRoute == item.destination.route,
                         textResId = item.textRes,
                         iconResId = item.iconRes,
+                        useIconOriginalColor = item.useIconOriginalColor,
                         onClick = { onOptionClick(item) }
                     )
                 }
@@ -89,7 +91,8 @@ private fun DrawerPanelTitle(
     ) {
         Text(
             text = stringResource(id = R.string.app_name).uppercase(),
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.headlineLarge,
+            fontFamily = monofettFontFamily,
             color = MaterialTheme.colorScheme.primary
         )
         IconButton(onClick = onCloseDrawerClick) {
@@ -120,13 +123,20 @@ private fun DrawerPanelItem(
     selected: Boolean,
     @StringRes textResId: Int,
     @DrawableRes iconResId: Int,
+    useIconOriginalColor: Boolean,
     onClick: () -> Unit
 ) {
     val text = stringResource(textResId)
     NavigationDrawerItem(
         selected = selected,
         label = { Text(text = text, modifier = Modifier.padding(horizontal = 16.dp)) },
-        icon = { Icon(painter = painterResource(iconResId), contentDescription = text, tint = Color.Unspecified) },
+        icon = {
+            if (useIconOriginalColor) {
+                Icon(painter = painterResource(iconResId), contentDescription = text, tint = Color.Unspecified)
+            } else {
+                Icon(painter = painterResource(iconResId), contentDescription = text)
+            }
+        },
         colors = NavigationDrawerItemDefaults.colors(unselectedContainerColor = Color.Transparent),
         onClick = onClick
     )
@@ -135,7 +145,8 @@ private fun DrawerPanelItem(
 data class PanelItemData(
     @StringRes val textRes: Int,
     @DrawableRes val iconRes: Int,
-    val destination: Destination
+    val destination: Destination,
+    val useIconOriginalColor: Boolean = false
 )
 
 data class PanelSectionData(

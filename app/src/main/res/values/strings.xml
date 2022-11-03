@@ -26,12 +26,23 @@
     <!-- Details screen -->
     <string name="menu_fav_set_on">Set this country as favorite</string>
     <string name="menu_fav_set_off">Remove this country from favorites</string>
+    <string name="details_code">ISO code</string>
+    <string name="details_location">Location</string>
+    <string name="details_capital">Capital</string>
+    <string name="details_area">Area</string>
+    <string name="details_population">Population</string>
+    <string name="details_source">Data source: restcountries.com</string>
 
     <!-- About screen -->
     <string name="title_about">About Flagorama</string>
     <string name="info_version">Version %s</string>
     <string name="info_debug">[DEBUG]</string>
     <string name="info_description">Discover the flags of the world.</string>
+    <string name="info_server">All data about countries and flags provided by restcountries.com</string>
+    <string name="info_credits_icon_title">Icon credits:</string>
+    <string-array name="info_credits_icon_items">
+        <item>Opoloo (CC BY-SA 4.0)</item>
+    </string-array>
     <string name="info_credits_photo_title">Photo credits:</string>
     <string-array name="info_credits_photo_items">
         <item>Pti Per (CC BY-SA 4.0)</item>
@@ -49,19 +60,25 @@
     <string-array name="source_contents">
         <item>This app is open source: the source code is available on GitHub under the Apache license.</item>
     </string-array>
-    <string name="source_goto_github">Go to GitHub</string>
+    <string name="source_goto_github">View on GitHub</string>
 
     <!-- Data privacy screen -->
     <string name="title_privacy">Privacy Policy</string>
     <string-array name="privacy_titles">
+        <item>Free &amp; no ads</item>
         <item>Personal Data</item>
         <item>Device Permissions</item>
     </string-array>
     <string-array name="privacy_contents">
+        <item>This app is provided free of charge and without any ad being displayed.</item>
         <item>This app does not collect, store or share any personal data from the user.</item>
         <item>We do not require any kind of special permission (such as camera, location, etc.)
         in order to use this app.</item>
     </string-array>
+
+    <!-- Error messages -->
+    <string name="error_generic">An error occurred when contacting the server. Check your Internet
+        connection</string>
 
     <!-- Accessibility -->
     <string name="open_drawer_description">Open navigation drawer</string>

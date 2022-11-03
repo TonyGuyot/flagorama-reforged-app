@@ -32,6 +32,7 @@ class FlagoramaApplication : Application(), ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader {
         return ImageLoader.Builder(this)
             .crossfade(true)
+            .error(R.drawable.ic_action_flag)
             .components {
                 add(SvgDecoder.Factory())
             }

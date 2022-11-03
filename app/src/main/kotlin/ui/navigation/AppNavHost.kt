@@ -15,11 +15,11 @@
  */
 package io.github.tonyguyot.flagorama.ui.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 import io.github.tonyguyot.flagorama.ui.screens.*
 
 @Composable
@@ -36,7 +36,7 @@ fun AppNavHost(
         }
         composable(Destination.Favorites.route) {
             FavoritesScreen(onDrawerClick = onDrawerClick) { country ->
-                navController.gotoCountryDetails(country.code)
+                navController.gotoCountryDetails(country)
             }
         }
         composable(Destination.About.route) {
@@ -55,15 +55,16 @@ fun AppNavHost(
                 CountryListScreen(
                     regionKey = regionKey,
                     onBackClick = { navController.popBackStack() },
-                    onClick = { country -> navController.gotoCountryDetails(country.code) }
+                    onClick = { country -> navController.gotoCountryDetails(country) }
                 )
             }
         }
 
         // Third level destinations
-        composable("country/{code}") { navBackStackEntry ->
+        composable("country/{code}/{name}") { navBackStackEntry ->
             navBackStackEntry.arguments?.getString("code")?.let { countryCode ->
-                CountryDetailsScreen(countryCode = countryCode) {
+                val name = navBackStackEntry.arguments?.getString("name") ?: countryCode
+                CountryDetailsScreen(countryTitle = name) {
                     navController.popBackStack()
                 }
             }
@@ -73,7 +74,9 @@ fun AppNavHost(
 
 fun NavHostController.gotoHome() = navigateFirstLevel("home")
 fun NavHostController.gotoCountryList(regionKey: String) = navigate("countries/${regionKey}")
-fun NavHostController.gotoCountryDetails(countryCode: String) = navigate("country/${countryCode}")
+fun NavHostController.gotoCountryDetails(country: CountryOverview) {
+    navigate("country/${country.code}/${country.name}")
+}
 
 fun NavHostController.gotoFavorites() = navigateFirstLevel("favorites")
 fun NavHostController.gotoAbout() = navigateFirstLevel("about")

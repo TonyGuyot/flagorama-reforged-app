@@ -32,7 +32,9 @@ class CountryRemoteDataSource(private val service: RestCountriesService): BaseRe
         }
 
     suspend fun fetchCountryDetails(countryCode: String) =
-        fetchResource({ service.getCountryDetails(countryCode) }) { toCountryDetails(it.first()) }
+        fetchResource({ service.getCountryDetails(countryCode) }) { restCountryDetails ->
+            toCountryDetails(restCountryDetails.first { it.code == countryCode })
+        }
 
     companion object Mapper {
         /** map a country network object to a country logic object */
@@ -47,7 +49,10 @@ class CountryRemoteDataSource(private val service: RestCountriesService): BaseRe
         fun toCountryDetails(source: RestCountryDetails) = CountryDetails(
             code = source.code,
             name = source.name.common,
-            nativeNames = source.name.nativeNames.values.map { it.official }.distinct(),
+            nativeNames = source.name.nativeNames.values
+                .map { it.official }
+                .distinct()
+                .filterNot { it == source.name.common },
             flagUrl = source.flags.svgImageUrl,
             subregion = source.subregion ?: "",
             capital = source.capital.first(),

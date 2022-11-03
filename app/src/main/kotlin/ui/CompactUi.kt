@@ -43,12 +43,14 @@ fun CompactUi(navController: NavHostController) {
                 PanelItemData(
                     textRes = R.string.menu_global,
                     iconRes = R.drawable.ic_action_globe,
-                    destination = Destination.Home
+                    destination = Destination.Home,
+                    useIconOriginalColor = true
                 ),
                 PanelItemData(
                     textRes = R.string.menu_favorites,
                     iconRes = R.drawable.ic_action_fav_on,
                     destination = Destination.Favorites,
+                    useIconOriginalColor = true
                 )
             )
         ),

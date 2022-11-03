@@ -15,10 +15,10 @@
  */
 package io.github.tonyguyot.flagorama.ui.screens
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -31,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,14 +48,14 @@ import io.github.tonyguyot.flagorama.viewModel.CountryDetailsViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryDetailsScreen(
-    countryCode: String,
+    countryTitle: String,
     modifier: Modifier = Modifier,
     viewModel: CountryDetailsViewModel = hiltViewModel(),
     onBackClick: () -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = { CountryDetailsTopAppBar(countryCode, viewModel, onBackClick) }
+        topBar = { CountryDetailsTopAppBar(countryTitle, viewModel, onBackClick) }
     ) { paddingValues ->
         CountryDetailsContent(Modifier.padding(paddingValues), viewModel)
     }
@@ -67,7 +69,7 @@ private fun CountryDetailsTopAppBar(
     onNavigationClick: () -> Unit
 ) {
     val isFavoriteState by viewModel.favoriteState.collectAsState(false)
-    CenterAlignedTopAppBar(
+    TopAppBar(
         title = { Text(title) },
         navigationIcon = {
             IconButton(
@@ -85,13 +87,18 @@ private fun CountryDetailsTopAppBar(
                     viewModel.setAsFavorite(!isFavoriteState)
                 }
             ) {
-                val descriptionResId = if (isFavoriteState) R.string.menu_fav_set_off else R.string.menu_fav_set_on
-                val iconResId = if (isFavoriteState) R.drawable.ic_action_fav_on else R.drawable.ic_action_fav_off
-                Icon(
-                    painter = painterResource(iconResId),
-                    contentDescription = stringResource(descriptionResId),
-                    tint = Color.Unspecified
-                )
+                if (isFavoriteState) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_action_fav_on),
+                        contentDescription = stringResource(R.string.menu_fav_set_off),
+                        tint = Color.Unspecified
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_action_fav_off),
+                        contentDescription = stringResource(R.string.menu_fav_set_on),
+                    )
+                }
             }
         }
     )
@@ -115,8 +122,12 @@ private fun CountryDetails(
     modifier: Modifier = Modifier,
     country: CountryDetails
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
-        modifier = modifier.padding(all = 4.dp),
+        modifier = modifier
+            .padding(all = 8.dp)
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CountryFlag(country.flagUrl, country.name)
@@ -124,12 +135,14 @@ private fun CountryDetails(
         CountryNativeNames(country.nativeNames)
         CountryTableData(
             listOf(
-                Pair("Where:", country.subregion),
-                Pair("Capital", country.capital),
-                Pair("Area", country.area.toString()),
-                Pair("Population", country.population.toString())
+                Pair(stringResource(R.string.details_code), country.code),
+                Pair(stringResource(R.string.details_location), country.subregion),
+                Pair(stringResource(R.string.details_capital), country.capital),
+                Pair(stringResource(R.string.details_area), "${country.area} km²"),
+                Pair(stringResource(R.string.details_population), country.population.toString())
             )
         )
+        CountryDataSource()
     }
 }
 
@@ -137,13 +150,18 @@ private fun CountryDetails(
 private fun CountryFlag(flagUrl: String, countryName: String) {
     AsyncImage(
         model = flagUrl,
-        contentDescription = stringResource(R.string.flag_description, countryName)
+        contentDescription = stringResource(R.string.flag_description, countryName),
+        modifier = Modifier.padding(horizontal = 10.dp)
     )
 }
 
 @Composable
 private fun CountryTitle(title: String) {
-    Text(title, style = MaterialTheme.typography.headlineSmall)
+    Text(
+        text = title,
+        modifier = Modifier.padding(8.dp),
+        style = MaterialTheme.typography.headlineSmall
+    )
 }
 
 @Composable
@@ -155,23 +173,26 @@ private fun CountryNativeNames(nativeNames: List<String>) {
 
 @Composable
 private fun CountryNativeName(name: String) {
-    Text(name, style = MaterialTheme.typography.titleMedium)
+    Text(
+        text = name,
+        style = MaterialTheme.typography.titleMedium,
+        textAlign = TextAlign.Center
+    )
 }
 
 @Composable
 private fun CountryTableData(tableData: List<Pair<String, String>>) {
-    val column1Weight = .3f // 30%
-    val column2Weight = .7f // 70%
+    val column1Weight = .4f // 40%
+    val column2Weight = .6f // 60%
 
-    LazyColumn(
+    Column(
         Modifier
             .fillMaxSize()
             .padding(16.dp)) {
-        items(items = tableData) {
-            val (id, text) = it
+        tableData.forEachIndexed { index, (id, text) ->
             Row(Modifier.fillMaxWidth()) {
-                TableCell(text = id, weight = column1Weight)
-                TableCell(text = text, weight = column2Weight)
+                TableCell(text = id, weight = column1Weight, index = index, header = true)
+                TableCell(text = text, weight = column2Weight, index = index)
             }
         }
     }
@@ -180,21 +201,41 @@ private fun CountryTableData(tableData: List<Pair<String, String>>) {
 @Composable
 fun RowScope.TableCell(
     text: String,
-    weight: Float
+    weight: Float,
+    index: Int,
+    header: Boolean = false
 ) {
+    val fgColor = if (index % 2 == 0) {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    } else {
+        MaterialTheme.colorScheme.onSecondaryContainer
+    }
+    val bgColor = if (index % 2 != 0) {
+        MaterialTheme.colorScheme.primaryContainer
+    } else {
+        MaterialTheme.colorScheme.secondaryContainer
+    }
     Text(
         text = text,
-        Modifier
-            .border(1.dp, Color.Black)
+        color = fgColor,
+        fontWeight = if (header) FontWeight.Bold else FontWeight.Normal,
+        modifier = Modifier
             .weight(weight)
+            .padding(1.dp)
+            .background(bgColor)
             .padding(8.dp)
     )
+}
+
+@Composable
+private fun CountryDataSource() {
+    Text(stringResource(R.string.details_source))
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
     AppTheme {
-        CountryDetailsScreen("FRA") {}
+        CountryDetailsScreen("France") {}
     }
 }
