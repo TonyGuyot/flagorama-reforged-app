@@ -72,16 +72,10 @@ fun AppNavHost(
     }
 }
 
-fun NavHostController.gotoHome() = navigateFirstLevel("home")
 fun NavHostController.gotoCountryList(regionKey: String) = navigate("countries/${regionKey}")
 fun NavHostController.gotoCountryDetails(country: CountryOverview) {
     navigate("country/${country.code}/${country.name}")
 }
-
-fun NavHostController.gotoFavorites() = navigateFirstLevel("favorites")
-fun NavHostController.gotoAbout() = navigateFirstLevel("about")
-fun NavHostController.gotoSource() = navigateFirstLevel("source")
-fun NavHostController.gotoPrivacy() = navigateFirstLevel("privacy")
 
 private fun NavHostController.navigateFirstLevel(route: String) {
     navigate(route) {

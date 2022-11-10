@@ -52,7 +52,7 @@ object DatabaseFirstStrategy {
         liveData(Dispatchers.IO) {
             // report start state LOADING + no data
             //Timber.d("Loading...")
-            emit(Resource.loading<T>())
+            emit(Resource.loading())
 
             // retrieve the cached data
             val cachedSource = databaseQuery.invoke()

@@ -138,8 +138,8 @@ private fun CountryDetails(
                 Pair(stringResource(R.string.details_code), country.code),
                 Pair(stringResource(R.string.details_location), country.subregion),
                 Pair(stringResource(R.string.details_capital), country.capital),
-                Pair(stringResource(R.string.details_area), "${country.area} km²"),
-                Pair(stringResource(R.string.details_population), country.population.toString())
+                Pair(stringResource(R.string.details_area), "${country.fmtArea} km²"),
+                Pair(stringResource(R.string.details_population), country.fmtPopulation)
             )
         )
         CountryDataSource()

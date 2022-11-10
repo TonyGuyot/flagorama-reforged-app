@@ -26,4 +26,7 @@ data class CountryDetails(
     val area: Double,
     val independent: Boolean,
     val unMember: Boolean
-)
+) {
+    val fmtArea get() = String.format("%s", area).removeSuffix(".0").removeSuffix(",0")
+    val fmtPopulation get() = String.format("%s", population)
+}
