@@ -16,7 +16,7 @@
 package io.github.tonyguyot.flagorama.ui.common
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MenuOpen
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -34,7 +34,7 @@ fun TopLevelAppBar(title: String, onNavigationClick: () -> Unit) {
                 onClick = onNavigationClick
             ) {
                 Icon(
-                    imageVector = Icons.Default.MenuOpen,
+                    imageVector = Icons.Default.Menu,
                     contentDescription = stringResource(id = R.string.open_drawer_description)
                 )
             }

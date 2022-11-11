@@ -17,6 +17,8 @@ package io.github.tonyguyot.flagorama.domain.model
 
 data class CountryDetails(
     val code: String,
+    val iso2Code: String,
+    val iso3Code: String,
     val name: String,
     val nativeNames: List<String>,
     val flagUrl: String,
@@ -27,6 +29,7 @@ data class CountryDetails(
     val independent: Boolean,
     val unMember: Boolean
 ) {
-    val fmtArea get() = String.format("%s", area).removeSuffix(".0").removeSuffix(",0")
-    val fmtPopulation get() = String.format("%s", population)
+    val fmtIsoCodes get() = listOf(iso2Code, iso3Code).joinToString()
+    val fmtArea get() = String.format("%,.2f", area).removeSuffix(".00").removeSuffix(",00")
+    val fmtPopulation get() = String.format("%,d", population)
 }

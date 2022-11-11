@@ -18,8 +18,11 @@ package io.github.tonyguyot.flagorama.data.remote.model
 import com.google.gson.annotations.SerializedName
 
 data class RestCountryDetails(
+    @field:SerializedName("cca2")
+    val iso2Code: String,
+
     @field:SerializedName("cca3")
-    val code: String,
+    val iso3Code: String,
 
     @field:SerializedName("name")
     val name: RestCountryName,

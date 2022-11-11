@@ -17,6 +17,8 @@ package io.github.tonyguyot.flagorama.inject
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -114,6 +116,13 @@ object FlagoramaModule {
     fun provideConverterFactory(): GsonConverterFactory =
         GsonConverterFactory.create(Gson())
 
+    private val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("DELETE FROM country_details_table")
+            database.execSQL("ALTER TABLE country_details_table ADD country_iso2_code TEXT NOT NULL")
+        }
+    }
+
     @Singleton
     @Provides
     fun provideDataBase(@ApplicationContext context: Context): AppDatabase {
@@ -121,6 +130,9 @@ object FlagoramaModule {
             context.applicationContext,
             AppDatabase::class.java,
             AppDatabase.NAME
-        ).build()
+        )
+            .addMigrations(MIGRATION_1_2)
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

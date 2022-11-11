@@ -69,7 +69,9 @@ class CountryLocalDataSource(private val dao: CountryDao) {
 
         /** map a country details database entity to a country details logic object */
         fun toCountryDetails(source: CountryDetailsEntity) = CountryDetails(
-            code = source.code,
+            code = source.iso3Code,
+            iso2Code = source.iso2Code,
+            iso3Code = source.iso3Code,
             name = source.name,
             flagUrl = source.flagUrl,
             subregion = source.subregion,
@@ -83,7 +85,8 @@ class CountryLocalDataSource(private val dao: CountryDao) {
 
         /** map a country details logic object to a country details database entity */
         fun toCountryDetailsEntity(source: CountryDetails) = CountryDetailsEntity(
-            code = source.code,
+            iso2Code = source.iso2Code,
+            iso3Code = source.iso3Code,
             name = source.name,
             flagUrl = source.flagUrl,
             subregion = source.subregion,

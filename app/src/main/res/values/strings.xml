@@ -26,12 +26,17 @@
     <!-- Details screen -->
     <string name="menu_fav_set_on">Set this country as favorite</string>
     <string name="menu_fav_set_off">Remove this country from favorites</string>
-    <string name="details_code">ISO code</string>
+    <string name="details_codes">ISO codes</string>
     <string name="details_location">Location</string>
     <string name="details_capital">Capital</string>
     <string name="details_area">Area</string>
     <string name="details_population">Population</string>
+    <string name="details_unknown">N/C</string>
     <string name="details_source">Data source: restcountries.com</string>
+
+    <!-- Favorites screen -->
+    <string name="fav_empty">Your list of favorite flags is empty.\nYou can select favorites by
+        clicking on the ♥︎ icon in a country description.</string>
 
     <!-- About screen -->
     <string name="title_about">About Flagorama</string>

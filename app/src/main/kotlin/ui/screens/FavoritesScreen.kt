@@ -35,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.domain.model.CountryOverview
+import io.github.tonyguyot.flagorama.ui.common.InfoMessage
 import io.github.tonyguyot.flagorama.ui.common.TopLevelAppBar
 import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 import io.github.tonyguyot.flagorama.viewModel.FavoritesViewModel
@@ -61,7 +62,18 @@ private fun FavoriteCountryListContent(
     onClick: (CountryOverview) -> Unit
 ) {
     val state by viewModel.uiState.collectAsState(initial = emptyList())
-    CountryOverviewGrid(modifier, state, onClick)
+    if (state.isEmpty()) {
+        NoFavorites(modifier)
+    } else {
+        CountryOverviewGrid(modifier, state, onClick)
+    }
+}
+
+@Composable
+private fun NoFavorites(
+    modifier: Modifier = Modifier,
+) {
+    InfoMessage(message = stringResource(R.string.fav_empty), modifier = modifier)
 }
 
 @Composable

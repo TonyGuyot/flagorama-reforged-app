@@ -32,6 +32,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         const val NAME = "Flagorama.db"
-        const val VERSION = 1
+        const val VERSION = 2
     }
 }

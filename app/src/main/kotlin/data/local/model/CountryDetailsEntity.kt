@@ -23,7 +23,10 @@ import androidx.room.PrimaryKey
 data class CountryDetailsEntity(
     @PrimaryKey
     @ColumnInfo(name = "country_iso3_code")
-    val code: String,
+    val iso3Code: String,
+
+    @ColumnInfo(name = "country_iso2_code")
+    val iso2Code: String,
 
     @ColumnInfo(name = "name")
     val name: String,

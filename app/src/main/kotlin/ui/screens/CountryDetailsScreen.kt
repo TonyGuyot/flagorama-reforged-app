@@ -122,6 +122,41 @@ private fun CountryDetails(
     modifier: Modifier = Modifier,
     country: CountryDetails
 ) {
+    val name = country.name
+    val flagUrl = country.flagUrl
+    val nativeNames = country.nativeNames
+    val unknown = stringResource(R.string.details_unknown)
+    val info = listOf(
+        Pair(stringResource(R.string.details_codes), country.fmtIsoCodes),
+        Pair(stringResource(R.string.details_location), country.subregion),
+        Pair(stringResource(R.string.details_capital), country.capital),
+        Pair(
+            stringResource(R.string.details_area),
+            if (country.area < 0.0) unknown else "${country.fmtArea} km²"
+        ),
+        Pair(
+            stringResource(R.string.details_population),
+            if (country.population < 0) unknown else country.fmtPopulation
+        )
+    )
+    BoxWithConstraints {
+        val isPortrait = maxHeight > maxWidth
+        if (isPortrait) {
+            CountryDetailsPortrait(modifier, name, flagUrl, nativeNames, info)
+        } else {
+            CountryDetailsLandscape(modifier, name, flagUrl, nativeNames, info)
+        }
+    }
+}
+
+@Composable
+private fun CountryDetailsPortrait(
+    modifier: Modifier = Modifier,
+    name: String,
+    flagUrl: String,
+    nativeNames: List<String>,
+    info: List<Pair<String, String>>
+) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -130,19 +165,48 @@ private fun CountryDetails(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CountryFlag(country.flagUrl, country.name)
-        CountryTitle(country.name)
-        CountryNativeNames(country.nativeNames)
-        CountryTableData(
-            listOf(
-                Pair(stringResource(R.string.details_code), country.code),
-                Pair(stringResource(R.string.details_location), country.subregion),
-                Pair(stringResource(R.string.details_capital), country.capital),
-                Pair(stringResource(R.string.details_area), "${country.fmtArea} km²"),
-                Pair(stringResource(R.string.details_population), country.fmtPopulation)
-            )
-        )
+        CountryFlag(flagUrl, name)
+        CountryTitle(name)
+        CountryNativeNames(nativeNames)
+        CountryTableData(info)
         CountryDataSource()
+    }
+}
+
+@Composable
+private fun CountryDetailsLandscape(
+    modifier: Modifier = Modifier,
+    name: String,
+    flagUrl: String,
+    nativeNames: List<String>,
+    info: List<Pair<String, String>>
+) {
+    val scrollState = rememberScrollState()
+
+    Row(
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.Top
+    ) {
+        Column(
+            modifier = modifier
+                .weight(1f)
+                .padding(all = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CountryFlag(flagUrl, name)
+        }
+        Column(
+            modifier = modifier
+                .weight(1f)
+                .padding(all = 8.dp)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CountryTitle(name)
+            CountryNativeNames(nativeNames)
+            CountryTableData(info)
+            CountryDataSource()
+        }
     }
 }
 
@@ -190,7 +254,10 @@ private fun CountryTableData(tableData: List<Pair<String, String>>) {
             .fillMaxSize()
             .padding(16.dp)) {
         tableData.forEachIndexed { index, (id, text) ->
-            Row(Modifier.fillMaxWidth()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 TableCell(text = id, weight = column1Weight, index = index, header = true)
                 TableCell(text = text, weight = column2Weight, index = index)
             }
