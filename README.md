@@ -11,7 +11,9 @@ This is intended as a playground to experiment with the Jetpack libraries & othe
 technologies.
 
 This is a new (reforged) version of [Flagorama](https://github.com/TonyGuyot/flagorama-app). The new
-version is using Jetpack Compose and Material Design 3.
+version is using Jetpack Compose, Material Design 3 and Dagger/Hilt among other things.
+
+The old version was using the Android view system and is no more maintained.
 
 ## Technology stack
 
@@ -27,11 +29,17 @@ version is using Jetpack Compose and Material Design 3.
 - [x] Coil for the download of images
 - [x] Dagger/Hilt for dependency injection
 - [x] GrGit for the automatic versioning of the app
-- [ ] Timber for logging
+
+Next steps:
+
+- [ ] Replace all LiveData with Flows
+- [ ] Add some animations with Compose
+- [ ] Add logging (Timber, Firebase)
 
 ## Technical documentation
 
-TBD
+The [architecture description](https://github.com/TonyGuyot/flagorama-app/blob/master/doc/architecture.md) 
+of the old app is still valid to some extents.
 
 ## Copyrights and licenses
 

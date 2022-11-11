@@ -93,7 +93,7 @@ private fun CountryListContent(
     val state by viewModel.uiState.observeAsState(Resource.loading())
     when (state.status) {
         Resource.Status.SUCCESS -> CountryOverviewGrid(modifier, state.data ?: emptyList(), onClick)
-        Resource.Status.ERROR -> ErrorMessage(modifier)
+        Resource.Status.ERROR -> ErrorMessage(state.error, modifier)
         Resource.Status.LOADING -> WaitingIndicator(modifier)
     }
 }

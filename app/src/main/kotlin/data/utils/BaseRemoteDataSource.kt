@@ -15,8 +15,11 @@
  */
 package io.github.tonyguyot.flagorama.data.utils
 
+import android.util.Log
 import retrofit2.Response
 import java.lang.Exception
+
+const val TAG = "flagorama-http"
 
 /**
  * Base data source class for all network access.
@@ -31,17 +34,14 @@ abstract class BaseRemoteDataSource {
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body != null)
-                    return Resource.success(
-                        transform(body)
-                    )
-                return Resource.error(
-                    Exception("empty body")
-                )
+                    return Resource.success(transform(body))
+                Log.e(TAG, "HTTP OK but no body in response")
+                return Resource.error(Exception("empty body"))
             }
-            return Resource.error(
-                Exception("HTTP error ${response.code()}")
-            )
+            Log.e(TAG, "HTTP error ${response.code()}")
+            return Resource.error(Exception("HTTP error ${response.code()}"))
         } catch (e: Exception) {
+            Log.e(TAG, "Other exception during processing of HTTP response", e)
             return Resource.error(e)
         }
     }

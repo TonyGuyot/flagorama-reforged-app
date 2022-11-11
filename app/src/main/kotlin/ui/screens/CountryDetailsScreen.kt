@@ -112,7 +112,7 @@ fun CountryDetailsContent(
     val state by viewModel.uiState.observeAsState(Resource.loading())
     when (state.status) {
         Resource.Status.SUCCESS -> state.data?.let { CountryDetails(modifier, it) }
-        Resource.Status.ERROR -> ErrorMessage(modifier)
+        Resource.Status.ERROR -> ErrorMessage(state.error, modifier)
         Resource.Status.LOADING -> WaitingIndicator(modifier)
     }
 }
