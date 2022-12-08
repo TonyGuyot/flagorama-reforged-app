@@ -15,6 +15,11 @@ version is using Jetpack Compose, Material Design 3 and Dagger/Hilt among other 
 
 The old version was using the Android view system and is no more maintained.
 
+## Downloading the app
+
+The app is available on the [Google Play Store](https://play.google.com/store/apps/details?id=io.github.tonyguyot.flagorama) 
+for download.
+
 ## Technology stack
 
 - [x] Kotlin (of course)

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tonyguyot.flagorama.data.local
+package io.github.tonyguyot.flagorama.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -17,6 +17,8 @@ package io.github.tonyguyot.flagorama.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import io.github.tonyguyot.flagorama.data.local.dao.CountryDao
+import io.github.tonyguyot.flagorama.data.local.dao.FavoriteDao
 import io.github.tonyguyot.flagorama.data.local.model.CountryDetailsEntity
 import io.github.tonyguyot.flagorama.data.local.model.CountryOverviewEntity
 import io.github.tonyguyot.flagorama.data.local.model.FavoriteEntity

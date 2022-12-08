@@ -13,28 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tonyguyot.flagorama.inject
+package io.github.tonyguyot.flagorama.data.remote.inject
 
-import android.content.Context
-import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.tonyguyot.flagorama.BuildConfig
-import io.github.tonyguyot.flagorama.domain.repositories.CountryRepository
-import io.github.tonyguyot.flagorama.data.DefaultCountryRepository
-import io.github.tonyguyot.flagorama.data.DefaultFavoriteRepository
-import io.github.tonyguyot.flagorama.data.local.AppDatabase
-import io.github.tonyguyot.flagorama.data.local.CountryLocalDataSource
-import io.github.tonyguyot.flagorama.data.local.FavoriteLocalDataSource
 import io.github.tonyguyot.flagorama.data.remote.CountryRemoteDataSource
 import io.github.tonyguyot.flagorama.data.remote.RestCountriesService
-import io.github.tonyguyot.flagorama.domain.repositories.FavoriteRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -43,36 +31,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object FlagoramaModule {
-
-    @Singleton
-    @Provides
-    fun provideCountryRepository(
-        local: CountryLocalDataSource,
-        remote: CountryRemoteDataSource
-    ): CountryRepository {
-        return DefaultCountryRepository(local, remote)
-    }
-
-    @Singleton
-    @Provides
-    fun provideFavoriteRepository(
-        local: FavoriteLocalDataSource
-    ): FavoriteRepository {
-        return DefaultFavoriteRepository(local)
-    }
-
-    @Singleton
-    @Provides
-    fun provideCountryLocalDataSource(database: AppDatabase): CountryLocalDataSource {
-        return CountryLocalDataSource(database.countryDao())
-    }
-
-    @Singleton
-    @Provides
-    fun provideFavoriteLocalDataSource(database: AppDatabase): FavoriteLocalDataSource {
-        return FavoriteLocalDataSource(database.favoriteDao())
-    }
+object RetrofitModule {
 
     @Singleton
     @Provides
@@ -115,24 +74,4 @@ object FlagoramaModule {
     @Provides
     fun provideConverterFactory(): GsonConverterFactory =
         GsonConverterFactory.create(Gson())
-
-    private val MIGRATION_1_2 = object : Migration(1, 2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("DELETE FROM country_details_table")
-            database.execSQL("ALTER TABLE country_details_table ADD country_iso2_code TEXT NOT NULL")
-        }
-    }
-
-    @Singleton
-    @Provides
-    fun provideDataBase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context.applicationContext,
-            AppDatabase::class.java,
-            AppDatabase.NAME
-        )
-            .addMigrations(MIGRATION_1_2)
-            .fallbackToDestructiveMigration()
-            .build()
-    }
 }

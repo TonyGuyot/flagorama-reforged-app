@@ -15,6 +15,7 @@
  */
 package io.github.tonyguyot.flagorama.data.local
 
+import io.github.tonyguyot.flagorama.data.local.dao.FavoriteDao
 import io.github.tonyguyot.flagorama.data.local.model.FavoriteEntity
 import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 import kotlinx.coroutines.flow.Flow
