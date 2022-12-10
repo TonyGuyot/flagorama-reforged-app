@@ -25,16 +25,16 @@ class DefaultCountryRepository @Inject constructor(
     private val local: CountryLocalDataSource,
     private val remote: CountryRemoteDataSource
 ) : CountryRepository {
-    override fun observeCountriesByRegion(regionKey: String) =
-        DatabaseFirstStrategy.getResultAsLiveData(
+    override suspend fun observeCountriesByRegion(regionKey: String) =
+        DatabaseFirstStrategy.getResultAsFlow(
             databaseQuery = { local.getCountriesByRegion(regionKey) },
             shouldFetch = { it.isEmpty() },
             networkCall = { remote.fetchCountries(regionKey) },
             saveCallResult = { local.saveCountries(it, regionKey) }
         )
 
-    override fun observeCountryDetails(countryCode: String) =
-        DatabaseFirstStrategy.getResultAsLiveData(
+    override suspend fun observeCountryDetails(countryCode: String) =
+        DatabaseFirstStrategy.getResultAsFlow(
             databaseQuery = { local.getCountryDetails(countryCode) },
             shouldFetch = { it == null },
             networkCall = { remote.fetchCountryDetails(countryCode) },

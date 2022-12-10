@@ -24,8 +24,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -90,7 +90,7 @@ private fun CountryListContent(
     viewModel: CountryListViewModel = hiltViewModel(),
     onClick: (CountryOverview) -> Unit
 ) {
-    val state by viewModel.uiState.observeAsState(Resource.loading())
+    val state by viewModel.uiState.collectAsState(Resource.loading())
     when (state.status) {
         Resource.Status.SUCCESS -> CountryOverviewGrid(modifier, state.data ?: emptyList(), onClick)
         Resource.Status.ERROR -> ErrorMessage(state.error, modifier)

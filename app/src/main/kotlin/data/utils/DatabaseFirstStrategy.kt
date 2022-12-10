@@ -15,9 +15,11 @@
  */
 package io.github.tonyguyot.flagorama.data.utils
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+
 //import timber.log.Timber
 
 /**
@@ -27,7 +29,7 @@ import kotlinx.coroutines.Dispatchers
 object DatabaseFirstStrategy {
 
     /**
-     * Retrieve the data as a [Resource] in a LiveData stream, so that the caller will be
+     * Retrieve the data as a [Resource] in a flow stream, so that the caller will be
      * notified of any change during the data retrieval process.
      *
      * The algorithm is the following:
@@ -45,11 +47,12 @@ object DatabaseFirstStrategy {
      *   - [Resource.Status.LOADING], if the process is still in progress (temporary data may be
      *              returned also)
      */
-    fun <T> getResultAsLiveData(databaseQuery: suspend () -> T,
-                                shouldFetch: (T) -> Boolean,
-                                networkCall: suspend () -> Resource<T>,
-                                saveCallResult: suspend (T) -> Unit): LiveData<Resource<T>> =
-        liveData(Dispatchers.IO) {
+    suspend fun <T> getResultAsFlow(
+        databaseQuery: suspend () -> T,
+        shouldFetch: (T) -> Boolean,
+        networkCall: suspend () -> Resource<T>,
+        saveCallResult: suspend (T) -> Unit
+    ): Flow<Resource<T>> = flow {
             // report start state LOADING + no data
             //Timber.d("Loading...")
             emit(Resource.loading())
@@ -83,11 +86,12 @@ object DatabaseFirstStrategy {
                         //Timber.d("Unexpected status from network or empty data")
                         emit(Resource.error(Exception("Unexpected error"), cachedSource))
                     }
-               }
+                }
             } else {
                 // the cached data is usable, report state SUCCESS + cached data
                 //Timber.d("Success: will use data from cache")
                 emit(Resource.success(cachedSource))
             }
         }
+        .flowOn(Dispatchers.IO)
 }

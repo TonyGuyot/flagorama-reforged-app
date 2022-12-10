@@ -28,7 +28,7 @@ for download.
 - [x] Compose Navigation for navigation between screens
 - [x] Material Design 3 for the styling of the UI
 - [x] Jetpack ViewModel and LifeCycle for the architecture
-- [x] LiveData and Coroutine Flows for the communication between components
+- [x] Coroutine Flows for the communication between components
 - [x] Room database for local storage
 - [x] Retrofit for network access
 - [x] Coil for the download of images
@@ -37,7 +37,6 @@ for download.
 
 Next steps:
 
-- [ ] Replace all LiveData with Flows
 - [ ] Add some animations with Compose
 - [ ] Add logging (Timber, Firebase)
 

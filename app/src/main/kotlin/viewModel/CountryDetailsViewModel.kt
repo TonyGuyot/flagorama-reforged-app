@@ -19,20 +19,37 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.tonyguyot.flagorama.data.utils.Resource
+import io.github.tonyguyot.flagorama.domain.model.CountryDetails
 import io.github.tonyguyot.flagorama.domain.repositories.CountryRepository
 import io.github.tonyguyot.flagorama.domain.repositories.FavoriteRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CountryDetailsViewModel @Inject constructor(
-    countryRepository: CountryRepository,
+    private val countryRepository: CountryRepository,
     private val favoriteRepository: FavoriteRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val countryCode: String = checkNotNull(savedStateHandle["code"])
-    val uiState = countryRepository.observeCountryDetails(countryCode)
+    private val internUiState = MutableStateFlow<Resource<CountryDetails?>>(Resource.loading())
+    val uiState: StateFlow<Resource<CountryDetails?>> = internUiState
     val favoriteState = favoriteRepository.observeCountryFavoriteStatus(countryCode)
+
+    init {
+        refreshUiState()
+    }
+
+    private fun refreshUiState() {
+        viewModelScope.launch {
+            countryRepository.observeCountryDetails(countryCode).collect {
+                internUiState.value = it
+            }
+        }
+    }
 
     fun setAsFavorite(favorite: Boolean) {
         viewModelScope.launch {

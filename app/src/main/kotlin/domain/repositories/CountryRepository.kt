@@ -15,12 +15,12 @@
  */
 package io.github.tonyguyot.flagorama.domain.repositories
 
-import androidx.lifecycle.LiveData
 import io.github.tonyguyot.flagorama.data.utils.Resource
 import io.github.tonyguyot.flagorama.domain.model.CountryDetails
 import io.github.tonyguyot.flagorama.domain.model.CountryOverview
+import kotlinx.coroutines.flow.Flow
 
 interface CountryRepository {
-    fun observeCountriesByRegion(regionKey: String): LiveData<Resource<List<CountryOverview>>>
-    fun observeCountryDetails(countryCode: String): LiveData<Resource<CountryDetails?>>
+    suspend fun observeCountriesByRegion(regionKey: String): Flow<Resource<List<CountryOverview>>>
+    suspend fun observeCountryDetails(countryCode: String): Flow<Resource<CountryDetails?>>
 }

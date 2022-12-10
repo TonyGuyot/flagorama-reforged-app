@@ -17,15 +17,34 @@ package io.github.tonyguyot.flagorama.viewModel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.tonyguyot.flagorama.data.utils.Resource
+import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 import io.github.tonyguyot.flagorama.domain.repositories.CountryRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CountryListViewModel @Inject constructor(
-    repository: CountryRepository,
+    private val repository: CountryRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val regionKey: String = checkNotNull(savedStateHandle["region"])
-    val uiState = repository.observeCountriesByRegion(regionKey)
+    private val internUiState = MutableStateFlow<Resource<List<CountryOverview>>>(Resource.loading())
+    val uiState: StateFlow<Resource<List<CountryOverview>>> = internUiState
+
+    init {
+        refreshUiState()
+    }
+
+    private fun refreshUiState() {
+        viewModelScope.launch {
+            repository.observeCountriesByRegion(regionKey).collect {
+                internUiState.value = it
+            }
+        }
+    }
 }
