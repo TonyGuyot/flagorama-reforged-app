@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Tony Guyot
+ * Copyright (C) 2022-2023 Tony Guyot
  */
 package io.github.tonyguyot.flagorama.ui.theme
 

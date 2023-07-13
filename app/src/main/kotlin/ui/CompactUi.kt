@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Tony Guyot
+ * Copyright (C) 2022-2023 Tony Guyot
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import io.github.tonyguyot.flagorama.ui.navigation.AppNavHost
 import io.github.tonyguyot.flagorama.ui.navigation.Destination
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompactUi(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()

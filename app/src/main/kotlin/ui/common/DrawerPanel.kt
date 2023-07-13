@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Tony Guyot
+ * Copyright (C) 2022-2023 Tony Guyot
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.ui.navigation.Destination
 import io.github.tonyguyot.flagorama.ui.theme.monofettFontFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationDrawerPanel(
     sections: List<PanelSectionData>,
@@ -117,7 +116,6 @@ private fun DrawerPanelHeadline(title: String) {
     Text(text = title.uppercase(), style = MaterialTheme.typography.titleMedium)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DrawerPanelItem(
     selected: Boolean,

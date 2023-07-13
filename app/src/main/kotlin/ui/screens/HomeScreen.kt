@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Tony Guyot
+ * Copyright (C) 2022-2023 Tony Guyot
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import io.github.tonyguyot.flagorama.domain.model.Region
 import io.github.tonyguyot.flagorama.ui.common.TopLevelAppBar
 import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
