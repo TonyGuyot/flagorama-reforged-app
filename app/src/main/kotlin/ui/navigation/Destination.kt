@@ -16,9 +16,9 @@
 package io.github.tonyguyot.flagorama.ui.navigation
 
 sealed class Destination(val route: String) {
-    object Home : Destination("home")
-    object Favorites : Destination("favorites")
-    object About : Destination("about")
-    object Source : Destination("source")
-    object Privacy : Destination("privacy")
+    data object Home : Destination("home")
+    data object Favorites : Destination("favorites")
+    data object About : Destination("about")
+    data object Source : Destination("source")
+    data object Privacy : Destination("privacy")
 }

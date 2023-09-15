@@ -77,6 +77,7 @@ fun NavHostController.gotoCountryDetails(country: CountryOverview) {
     navigate("country/${country.code}/${country.name}")
 }
 
+@Suppress("unused")
 private fun NavHostController.navigateFirstLevel(route: String) {
     navigate(route) {
         popUpTo(0)

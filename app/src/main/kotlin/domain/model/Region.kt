@@ -19,11 +19,11 @@ import androidx.annotation.StringRes
 import io.github.tonyguyot.flagorama.R
 
 sealed class Region(val key: String, @StringRes val nameResId: Int) {
-    object Africa : Region("Africa", R.string.africa)
-    object Americas : Region("Americas", R.string.americas)
-    object Asia : Region("Asia", R.string.asia)
-    object Europe : Region("Europe", R.string.europe)
-    object Oceania : Region("Oceania", R.string.oceania)
+    data object Africa : Region("Africa", R.string.africa)
+    data object Americas : Region("Americas", R.string.americas)
+    data object Asia : Region("Asia", R.string.asia)
+    data object Europe : Region("Europe", R.string.europe)
+    data object Oceania : Region("Oceania", R.string.oceania)
 
     companion object {
         val all = listOf(Africa, Americas, Asia, Europe, Oceania)
