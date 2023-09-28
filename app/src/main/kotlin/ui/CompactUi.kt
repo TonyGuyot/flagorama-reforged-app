@@ -57,6 +57,11 @@ fun CompactUi(navController: NavHostController) {
             titleRes = R.string.menu_headline_info,
             items = listOf(
                 PanelItemData(
+                    textRes = R.string.menu_settings,
+                    iconRes = R.drawable.ic_action_settings,
+                    destination = Destination.Settings
+                ),
+                PanelItemData(
                     textRes = R.string.menu_about,
                     iconRes = R.drawable.ic_action_info,
                     destination = Destination.About

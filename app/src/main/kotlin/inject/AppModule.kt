@@ -15,15 +15,19 @@
  */
 package io.github.tonyguyot.flagorama.inject
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.tonyguyot.flagorama.domain.repositories.CountryRepository
 import io.github.tonyguyot.flagorama.data.DefaultCountryRepository
 import io.github.tonyguyot.flagorama.data.DefaultFavoriteRepository
 import io.github.tonyguyot.flagorama.data.local.CountryLocalDataSource
 import io.github.tonyguyot.flagorama.data.local.FavoriteLocalDataSource
+import io.github.tonyguyot.flagorama.data.prefs.DefaultPrefsRepository
+import io.github.tonyguyot.flagorama.data.prefs.PrefsRepository
 import io.github.tonyguyot.flagorama.data.remote.CountryRemoteDataSource
 import io.github.tonyguyot.flagorama.domain.repositories.FavoriteRepository
 import javax.inject.Singleton
@@ -47,5 +51,11 @@ object AppModule {
         local: FavoriteLocalDataSource
     ): FavoriteRepository {
         return DefaultFavoriteRepository(local)
+    }
+
+    @Singleton
+    @Provides
+    fun providePrefsRepository(@ApplicationContext appContext: Context): PrefsRepository {
+        return DefaultPrefsRepository(appContext)
     }
 }

@@ -28,7 +28,7 @@ fun AppNavHost(
     onDrawerClick: () -> Unit
 ) {
     NavHost(navController = navController, startDestination = Destination.Home.route) {
-        // Top level destinations
+        // Top level destinations -- Flags category
         composable(Destination.Home.route) {
             HomeScreen(onDrawerClick = onDrawerClick) { region ->
                 navController.gotoCountryList(region.key)
@@ -38,6 +38,11 @@ fun AppNavHost(
             FavoritesScreen(onDrawerClick = onDrawerClick) { country ->
                 navController.gotoCountryDetails(country)
             }
+        }
+
+        // Top level destinations -- Info category
+        composable(Destination.Settings.route) {
+            SettingsScreen(onOpenDrawerClick = onDrawerClick)
         }
         composable(Destination.About.route) {
             AboutScreen(onOpenDrawerClick = onDrawerClick)

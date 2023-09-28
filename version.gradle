@@ -27,7 +27,7 @@ private static def getDirtyIndicator(git) {
     return 'X'
 }
 
-task printVersion() {
+tasks.register('printVersion') {
     println("Version Name: $gitVersionName")
     println("Version Code: $gitVersionCode")
 }

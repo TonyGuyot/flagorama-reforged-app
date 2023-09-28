@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.tonyguyot.flagorama.ui.navigation
+package io.github.tonyguyot.flagorama.data.prefs
 
-sealed class Destination(val route: String) {
-    data object Home : Destination("home")
-    data object Favorites : Destination("favorites")
-    data object Settings : Destination("settings")
-    data object About : Destination("about")
-    data object Source : Destination("source")
-    data object Privacy : Destination("privacy")
+import kotlinx.coroutines.flow.Flow
+
+interface PrefsRepository {
+    // Read preferences
+    fun readUseDynamicColors(): Flow<Boolean>
+    fun readColorMode(): Flow<Int>
+
+    // Update preferences
+    suspend fun updateUseDynamicColors(value: Boolean)
+    suspend fun updateColorMode(value: Int)
 }

@@ -1,11 +1,11 @@
 buildscript {
     ext {
-        versionTag = '0.5'
+        versionTag = '0.6'
         gradle_version = '8.1.1'
         kotlin_version = '1.9.0'
         ksp_version = '1.9.10-1.0.13'
         compose_version = '1.5.1'
-        material3_version = '1.1.1'
+        material3_version = '1.1.2'
         lifecycle_version = '2.6.2'
         room_version = '2.5.2'
         dagger_version = '2.46'
