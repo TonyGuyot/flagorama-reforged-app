@@ -34,6 +34,7 @@
     <string name="details_population">Population</string>
     <string name="details_unknown">N/C</string>
     <string name="details_source">Data source: restcountries.com</string>
+    <string name="details_refresh">Refresh data</string>
 
     <!-- Favorites screen -->
     <string name="fav_empty">Your list of favorite flags is empty.\nYou can select favorites by

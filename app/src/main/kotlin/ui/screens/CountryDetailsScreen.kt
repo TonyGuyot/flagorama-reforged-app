@@ -114,9 +114,12 @@ private fun CountryDetailsContent(
     val state by viewModel.uiState.collectAsState(Resource.loading())
     when (state.status) {
         Resource.Status.SUCCESS -> state.data?.let { countryDetails ->
-            CountryDetails(modifier, countryDetails) {
-                onFlagClick(CountryOverview.fromCountryDetails(countryDetails))
-            }
+            CountryDetails(
+                modifier = modifier,
+                country = countryDetails,
+                onFlagClick = { onFlagClick(CountryOverview.fromCountryDetails(countryDetails)) },
+                onRefreshClick = { viewModel.refresh() }
+            )
         }
         Resource.Status.ERROR -> ErrorMessage(state.error, modifier)
         Resource.Status.LOADING -> WaitingIndicator(modifier)
@@ -127,7 +130,8 @@ private fun CountryDetailsContent(
 private fun CountryDetails(
     modifier: Modifier = Modifier,
     country: CountryDetails,
-    onFlagClick: () -> Unit = {}
+    onFlagClick: () -> Unit,
+    onRefreshClick: () -> Unit
 ) {
     val name = country.name
     val flagUrl = country.flagUrl
@@ -149,9 +153,9 @@ private fun CountryDetails(
     BoxWithConstraints {
         val isPortrait = maxHeight > maxWidth
         if (isPortrait) {
-            CountryDetailsPortrait(modifier, name, flagUrl, nativeNames, info, onFlagClick)
+            CountryDetailsPortrait(modifier, name, flagUrl, nativeNames, info, onFlagClick, onRefreshClick)
         } else {
-            CountryDetailsLandscape(modifier, name, flagUrl, nativeNames, info, onFlagClick)
+            CountryDetailsLandscape(modifier, name, flagUrl, nativeNames, info, onFlagClick, onRefreshClick)
         }
     }
 }
@@ -163,7 +167,8 @@ private fun CountryDetailsPortrait(
     flagUrl: String,
     nativeNames: List<String>,
     info: List<Pair<String, String>>,
-    onFlagClick: () -> Unit = {}
+    onFlagClick: () -> Unit,
+    onRefreshClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -178,6 +183,7 @@ private fun CountryDetailsPortrait(
         CountryNativeNames(nativeNames)
         CountryTableData(info)
         CountryDataSource()
+        CountryRefresh(onRefreshClick)
     }
 }
 
@@ -188,7 +194,8 @@ private fun CountryDetailsLandscape(
     flagUrl: String,
     nativeNames: List<String>,
     info: List<Pair<String, String>>,
-    onFlagClick: () -> Unit = {}
+    onFlagClick: () -> Unit,
+    onRefreshClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -215,6 +222,7 @@ private fun CountryDetailsLandscape(
             CountryNativeNames(nativeNames)
             CountryTableData(info)
             CountryDataSource()
+            CountryRefresh(onRefreshClick)
         }
     }
 }
@@ -306,6 +314,13 @@ private fun RowScope.TableCell(
 @Composable
 private fun CountryDataSource() {
     Text(stringResource(R.string.details_source))
+}
+
+@Composable
+private fun CountryRefresh(onRefresh: () -> Unit) {
+    Button(modifier = Modifier.padding(8.dp), onClick = onRefresh) {
+        Text(stringResource(R.string.details_refresh))
+    }
 }
 
 @Preview(showBackground = true)

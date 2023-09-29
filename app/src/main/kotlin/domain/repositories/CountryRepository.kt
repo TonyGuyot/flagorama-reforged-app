@@ -22,5 +22,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CountryRepository {
     suspend fun observeCountriesByRegion(regionKey: String): Flow<Resource<List<CountryOverview>>>
-    suspend fun observeCountryDetails(countryCode: String): Flow<Resource<CountryDetails?>>
+    suspend fun observeCountryDetails(countryCode: String, forceFetch: Boolean = false): Flow<Resource<CountryDetails?>>
 }

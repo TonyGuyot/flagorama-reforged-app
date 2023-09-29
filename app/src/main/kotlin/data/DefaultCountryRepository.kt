@@ -33,10 +33,10 @@ class DefaultCountryRepository @Inject constructor(
             saveCallResult = { local.saveCountries(it, regionKey) }
         )
 
-    override suspend fun observeCountryDetails(countryCode: String) =
+    override suspend fun observeCountryDetails(countryCode: String, forceFetch: Boolean) =
         DatabaseFirstStrategy.getResultAsFlow(
             databaseQuery = { local.getCountryDetails(countryCode) },
-            shouldFetch = { it == null },
+            shouldFetch = { it == null || forceFetch },
             networkCall = { remote.fetchCountryDetails(countryCode) },
             saveCallResult = { local.saveCountryDetails(it) }
         )

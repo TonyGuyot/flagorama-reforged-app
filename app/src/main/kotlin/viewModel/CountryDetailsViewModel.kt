@@ -43,9 +43,11 @@ class CountryDetailsViewModel @Inject constructor(
         refreshUiState()
     }
 
-    private fun refreshUiState() {
+    fun refresh() = refreshUiState(true)
+
+    private fun refreshUiState(fetch: Boolean = false) {
         viewModelScope.launch {
-            countryRepository.observeCountryDetails(countryCode).collect {
+            countryRepository.observeCountryDetails(countryCode, fetch).collect {
                 internUiState.value = it
             }
         }
