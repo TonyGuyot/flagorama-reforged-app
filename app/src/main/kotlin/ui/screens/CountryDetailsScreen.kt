@@ -16,6 +16,7 @@
 package io.github.tonyguyot.flagorama.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -39,6 +40,7 @@ import coil.compose.AsyncImage
 import io.github.tonyguyot.flagorama.R
 import io.github.tonyguyot.flagorama.data.utils.Resource
 import io.github.tonyguyot.flagorama.domain.model.CountryDetails
+import io.github.tonyguyot.flagorama.domain.model.CountryOverview
 import io.github.tonyguyot.flagorama.ui.common.ErrorMessage
 import io.github.tonyguyot.flagorama.ui.common.WaitingIndicator
 import io.github.tonyguyot.flagorama.ui.theme.AppTheme
@@ -49,13 +51,14 @@ fun CountryDetailsScreen(
     countryTitle: String,
     modifier: Modifier = Modifier,
     viewModel: CountryDetailsViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit = {},
+    onFlagClick: (CountryOverview) -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = { CountryDetailsTopAppBar(countryTitle, viewModel, onBackClick) }
     ) { paddingValues ->
-        CountryDetailsContent(Modifier.padding(paddingValues), viewModel)
+        CountryDetailsContent(Modifier.padding(paddingValues), viewModel, onFlagClick)
     }
 }
 
@@ -103,13 +106,18 @@ private fun CountryDetailsTopAppBar(
 }
 
 @Composable
-fun CountryDetailsContent(
+private fun CountryDetailsContent(
     modifier: Modifier = Modifier,
-    viewModel: CountryDetailsViewModel
+    viewModel: CountryDetailsViewModel,
+    onFlagClick: (CountryOverview) -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState(Resource.loading())
     when (state.status) {
-        Resource.Status.SUCCESS -> state.data?.let { CountryDetails(modifier, it) }
+        Resource.Status.SUCCESS -> state.data?.let { countryDetails ->
+            CountryDetails(modifier, countryDetails) {
+                onFlagClick(CountryOverview.fromCountryDetails(countryDetails))
+            }
+        }
         Resource.Status.ERROR -> ErrorMessage(state.error, modifier)
         Resource.Status.LOADING -> WaitingIndicator(modifier)
     }
@@ -118,7 +126,8 @@ fun CountryDetailsContent(
 @Composable
 private fun CountryDetails(
     modifier: Modifier = Modifier,
-    country: CountryDetails
+    country: CountryDetails,
+    onFlagClick: () -> Unit = {}
 ) {
     val name = country.name
     val flagUrl = country.flagUrl
@@ -140,9 +149,9 @@ private fun CountryDetails(
     BoxWithConstraints {
         val isPortrait = maxHeight > maxWidth
         if (isPortrait) {
-            CountryDetailsPortrait(modifier, name, flagUrl, nativeNames, info)
+            CountryDetailsPortrait(modifier, name, flagUrl, nativeNames, info, onFlagClick)
         } else {
-            CountryDetailsLandscape(modifier, name, flagUrl, nativeNames, info)
+            CountryDetailsLandscape(modifier, name, flagUrl, nativeNames, info, onFlagClick)
         }
     }
 }
@@ -153,7 +162,8 @@ private fun CountryDetailsPortrait(
     name: String,
     flagUrl: String,
     nativeNames: List<String>,
-    info: List<Pair<String, String>>
+    info: List<Pair<String, String>>,
+    onFlagClick: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
 
@@ -163,7 +173,7 @@ private fun CountryDetailsPortrait(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CountryFlag(flagUrl, name)
+        CountryFlag(flagUrl, name, onFlagClick)
         CountryTitle(name)
         CountryNativeNames(nativeNames)
         CountryTableData(info)
@@ -177,7 +187,8 @@ private fun CountryDetailsLandscape(
     name: String,
     flagUrl: String,
     nativeNames: List<String>,
-    info: List<Pair<String, String>>
+    info: List<Pair<String, String>>,
+    onFlagClick: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
 
@@ -191,7 +202,7 @@ private fun CountryDetailsLandscape(
                 .padding(all = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CountryFlag(flagUrl, name)
+            CountryFlag(flagUrl, name, onFlagClick)
         }
         Column(
             modifier = modifier
@@ -209,11 +220,11 @@ private fun CountryDetailsLandscape(
 }
 
 @Composable
-private fun CountryFlag(flagUrl: String, countryName: String) {
+private fun CountryFlag(flagUrl: String, countryName: String, onClick: () -> Unit = {}) {
     AsyncImage(
         model = flagUrl,
         contentDescription = stringResource(R.string.flag_description, countryName),
-        modifier = Modifier.padding(horizontal = 10.dp)
+        modifier = Modifier.padding(horizontal = 10.dp).clickable { onClick() }
     )
 }
 
@@ -264,7 +275,7 @@ private fun CountryTableData(tableData: List<Pair<String, String>>) {
 }
 
 @Composable
-fun RowScope.TableCell(
+private fun RowScope.TableCell(
     text: String,
     weight: Float,
     index: Int,
@@ -301,6 +312,6 @@ private fun CountryDataSource() {
 @Composable
 private fun DefaultPreview() {
     AppTheme {
-        CountryDetailsScreen("France") {}
+        CountryDetailsScreen("France")
     }
 }

@@ -49,7 +49,7 @@ fun CountryListScreen(
     regionKey: String,
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    onClick: (CountryOverview) -> Unit,
+    onCountryClick: (CountryOverview) -> Unit,
 ) {
     val regionName = Region.getByKeyOrNull(regionKey)?.let {
         stringResource(id = it.nameResId)
@@ -58,7 +58,7 @@ fun CountryListScreen(
         modifier = modifier.fillMaxSize(),
         topBar = { CountryListTopAppBar(regionName, onBackClick) }
     ) { paddingValues ->
-        CountryListContent(modifier = Modifier.padding(paddingValues), onClick = onClick)
+        CountryListContent(modifier = Modifier.padding(paddingValues), onClick = onCountryClick)
     }
 }
 

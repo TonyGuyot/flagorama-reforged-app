@@ -20,4 +20,13 @@ data class CountryOverview(
     val name: String,
     val flagUrl: String,
     val flag: String
-)
+) {
+    companion object Factory {
+        fun fromCountryDetails(countryDetails: CountryDetails) = CountryOverview(
+            code = countryDetails.code,
+            name = countryDetails.name,
+            flagUrl = countryDetails.flagUrl,
+            flag = ""
+        )
+    }
+}

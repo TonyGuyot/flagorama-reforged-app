@@ -60,7 +60,7 @@ fun AppNavHost(
                 CountryListScreen(
                     regionKey = regionKey,
                     onBackClick = { navController.popBackStack() },
-                    onClick = { country -> navController.gotoCountryDetails(country) }
+                    onCountryClick = { country -> navController.gotoCountryDetails(country) }
                 )
             }
         }
@@ -69,9 +69,19 @@ fun AppNavHost(
         composable("country/{code}/{name}") { navBackStackEntry ->
             navBackStackEntry.arguments?.getString("code")?.let { countryCode ->
                 val name = navBackStackEntry.arguments?.getString("name") ?: countryCode
-                CountryDetailsScreen(countryTitle = name) {
-                    navController.popBackStack()
-                }
+                CountryDetailsScreen(
+                    countryTitle = name,
+                    onBackClick =  { navController.popBackStack() },
+                    onFlagClick = { country -> navController.gotoCountryFlag(country) }
+                )
+            }
+        }
+
+        // Fourth level destinations
+        composable("flag/{name}/{url}") { navBackStackEntry ->
+            navBackStackEntry.arguments?.getString("url")?.let { url ->
+                val name = navBackStackEntry.arguments?.getString("name") ?: url
+                FlagScreen(countryName = name, flagUrl = url.replace('|', '/'))
             }
         }
     }
@@ -80,6 +90,9 @@ fun AppNavHost(
 fun NavHostController.gotoCountryList(regionKey: String) = navigate("countries/${regionKey}")
 fun NavHostController.gotoCountryDetails(country: CountryOverview) {
     navigate("country/${country.code}/${country.name}")
+}
+fun NavHostController.gotoCountryFlag(country: CountryOverview) {
+    navigate("flag/${country.name}/${country.flagUrl.replace('/', '|')}")
 }
 
 @Suppress("unused")
