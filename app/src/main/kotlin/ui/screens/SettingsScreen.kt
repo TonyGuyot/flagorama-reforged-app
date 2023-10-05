@@ -45,7 +45,7 @@ import io.github.tonyguyot.flagorama.viewModel.AppViewModel
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    onOpenDrawerClick: () -> Unit
+    onOpenDrawerClick: (() -> Unit)?
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),

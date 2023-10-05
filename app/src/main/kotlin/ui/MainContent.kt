@@ -15,17 +15,22 @@
  */
 package io.github.tonyguyot.flagorama.ui
 
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import io.github.tonyguyot.flagorama.ui.navigation.AppNavHost
 
 @Composable
-fun MainUi(
-    windowSize: WindowWidthSizeClass,
-    navController: NavHostController
-) = when (windowSize) {
-    WindowWidthSizeClass.Compact -> CompactUi(navController = navController)
-    WindowWidthSizeClass.Medium -> CompactUi(navController = navController)
-    WindowWidthSizeClass.Expanded -> ExpandedUi(navController = navController)
-    else -> CompactUi(navController = navController)
+fun MainContent(
+    navController: NavHostController,
+    onDrawerClick: (() -> Unit)?
+) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        AppNavHost(navController = navController, onDrawerClick = onDrawerClick)
+    }
 }

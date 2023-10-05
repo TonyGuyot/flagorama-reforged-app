@@ -36,7 +36,7 @@ import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 @Composable
 fun SourceScreen(
     modifier: Modifier = Modifier,
-    onOpenDrawerClick: () -> Unit
+    onOpenDrawerClick: (() -> Unit)?
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),

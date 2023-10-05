@@ -43,7 +43,7 @@ import io.github.tonyguyot.flagorama.viewModel.FavoritesViewModel
 @Composable
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
-    onDrawerClick: () -> Unit,
+    onDrawerClick: (() -> Unit)?,
     onClick: (CountryOverview) -> Unit,
 ) {
     Scaffold(

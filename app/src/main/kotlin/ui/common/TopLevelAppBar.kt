@@ -26,17 +26,19 @@ import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopLevelAppBar(title: String, onNavigationClick: () -> Unit) {
+fun TopLevelAppBar(title: String, onNavigationClick: (() -> Unit)?) {
     CenterAlignedTopAppBar(
         title = { Text(title) },
         navigationIcon = {
-            IconButton(
-                onClick = onNavigationClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = stringResource(id = R.string.open_drawer_description)
-                )
+            onNavigationClick?.let {
+                IconButton(
+                    onClick = it
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = stringResource(id = R.string.open_drawer_description)
+                    )
+                }
             }
         }
     )

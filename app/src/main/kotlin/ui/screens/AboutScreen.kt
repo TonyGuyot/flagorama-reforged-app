@@ -40,7 +40,7 @@ import io.github.tonyguyot.flagorama.ui.theme.monofettFontFamily
 @Composable
 fun AboutScreen(
     modifier: Modifier = Modifier,
-    onOpenDrawerClick: () -> Unit
+    onOpenDrawerClick: (() -> Unit)?
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),

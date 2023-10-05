@@ -21,31 +21,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import io.github.tonyguyot.flagorama.ui.common.NavigationDrawerPanel
 import io.github.tonyguyot.flagorama.ui.navigation.drawerPanelSections
-import kotlinx.coroutines.launch
 
 @Composable
-fun CompactUi(navController: NavHostController) {
+fun ExpandedUi(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
+    PermanentNavigationDrawer(
         drawerContent = {
             NavigationDrawerPanel(
                 sections = drawerPanelSections,
                 currentRoute = navBackStackEntry?.destination?.route,
-                onCloseDrawerClick = { scope.launch { drawerState.close() } },
+                onCloseDrawerClick = null,
                 onOptionClick = { option ->
                     navController.navigate(option.destination.route)
-                    scope.launch { drawerState.close() }
                 }
             )
         }
     ) {
         MainContent(
             navController = navController,
-            onDrawerClick = { scope.launch { drawerState.open() } }
+            onDrawerClick = null
         )
     }
 }

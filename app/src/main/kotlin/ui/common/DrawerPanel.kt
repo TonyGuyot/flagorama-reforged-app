@@ -40,7 +40,7 @@ fun NavigationDrawerPanel(
     sections: List<PanelSectionData>,
     currentRoute: String?,
     modifier: Modifier = Modifier,
-    onCloseDrawerClick: () -> Unit = {},
+    onCloseDrawerClick: (() -> Unit)? = {},
     onOptionClick: (PanelItemData) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
@@ -79,7 +79,7 @@ fun NavigationDrawerPanel(
 @Composable
 private fun DrawerPanelTitle(
     modifier: Modifier = Modifier,
-    onCloseDrawerClick: () -> Unit
+    onCloseDrawerClick: (() -> Unit)?
 ) {
     Row(
         modifier = modifier
@@ -94,11 +94,13 @@ private fun DrawerPanelTitle(
             fontFamily = monofettFontFamily,
             color = MaterialTheme.colorScheme.primary
         )
-        IconButton(onClick = onCloseDrawerClick) {
-            Icon(
-                imageVector = Icons.Default.MenuOpen,
-                contentDescription = stringResource(id = R.string.close_drawer_description)
-            )
+        onCloseDrawerClick?.let {
+            IconButton(onClick = it) {
+                Icon(
+                    imageVector = Icons.Default.MenuOpen,
+                    contentDescription = stringResource(id = R.string.close_drawer_description)
+                )
+            }
         }
     }
 }

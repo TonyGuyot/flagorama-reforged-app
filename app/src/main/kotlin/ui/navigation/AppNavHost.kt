@@ -25,7 +25,7 @@ import io.github.tonyguyot.flagorama.ui.screens.*
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    onDrawerClick: () -> Unit
+    onDrawerClick: (() -> Unit)?
 ) {
     NavHost(navController = navController, startDestination = Destination.Home.route) {
         // Top level destinations -- Flags category

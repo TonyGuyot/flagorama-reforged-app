@@ -33,7 +33,7 @@ import io.github.tonyguyot.flagorama.ui.theme.AppTheme
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onDrawerClick: () -> Unit,
+    onDrawerClick: (() -> Unit)?,
     onClick: (Region) -> Unit,
 ) {
     Scaffold(
