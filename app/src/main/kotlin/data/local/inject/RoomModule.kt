@@ -46,9 +46,9 @@ object RoomModule {
     }
 
     private val MIGRATION_1_2 = object : Migration(1, 2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("DELETE FROM country_details_table")
-            database.execSQL("ALTER TABLE country_details_table ADD country_iso2_code TEXT NOT NULL")
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("DELETE FROM country_details_table")
+            db.execSQL("ALTER TABLE country_details_table ADD country_iso2_code TEXT NOT NULL")
         }
     }
 

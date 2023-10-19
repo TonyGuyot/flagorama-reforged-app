@@ -16,13 +16,14 @@
 package io.github.tonyguyot.flagorama.ui.screens
 
 import android.os.Build
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -83,6 +85,8 @@ private fun SettingsScreenContent(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             SettingsOnOffItem(
                 title = stringResource(R.string.theme_dynamic_color_title),
+                valueOn = stringResource(R.string.theme_dynamic_color_on),
+                valueOff = stringResource(R.string.theme_dynamic_color_off),
                 description = stringResource(R.string.theme_dynamic_color_description),
                 state = dynamicColor
             ) { newValue ->
@@ -93,6 +97,7 @@ private fun SettingsScreenContent(
         // Light/dark mode selection
         SettingsDialogItem(
             title = stringResource(R.string.theme_color_mode_title),
+            description = stringResource(R.string.theme_color_mode_menu),
             options = stringArrayResource(R.array.theme_color_mode_options),
             selected = colorMode
         ) { newValue ->
@@ -113,6 +118,8 @@ private fun SettingsHeader(subtitle: String) {
 @Composable
 private fun SettingsOnOffItem(
     title: String,
+    valueOn: String,
+    valueOff: String,
     description: String = "",
     state: Boolean,
     onChange: (Boolean) -> Unit
@@ -122,38 +129,35 @@ private fun SettingsOnOffItem(
             .fillMaxWidth()
             .padding(vertical = 10.dp)
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                modifier = Modifier.weight(0.8f)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(10.dp)
-                )
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(10.dp)
-                )
-            }
-            Row(modifier = Modifier.fillMaxHeight()) {
-                Box(
-                    modifier = Modifier
-                        .padding(vertical = 10.dp)
-                        .width(width = 1.dp)
-                        .height(60.dp)
-                        .background(color = MaterialTheme.colorScheme.primary)
-                )
+        Column {
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                Column(modifier = Modifier.weight(0.8f)) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(10.dp)
+                    )
+                    Text(
+                        text = if (state) valueOn else valueOff,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .padding(bottom = 5.dp)
+                    )
+                }
                 Switch(
                     modifier = Modifier.padding(10.dp),
                     checked = state,
                     onCheckedChange = onChange
                 )
             }
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                fontStyle = FontStyle.Italic,
+                modifier = Modifier.padding(10.dp)
+            )
         }
     }
 }
@@ -161,6 +165,7 @@ private fun SettingsOnOffItem(
 @Composable
 private fun SettingsDialogItem(
     title: String,
+    description: String,
     options: Array<String>,
     selected: Int,
     onChange: (Int) -> Unit
@@ -184,17 +189,26 @@ private fun SettingsDialogItem(
             .padding(vertical = 10.dp)
             .clickable { showDialog.value = true }
     ) {
-        Column {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(10.dp)
-            )
-            Text(
-                text = options[selected],
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(10.dp)
+        Row(horizontalArrangement = Arrangement.SpaceBetween) {
+            Column(modifier = Modifier.weight(0.8f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(10.dp)
+                )
+                Text(
+                    text = options[selected],
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .padding(bottom = 10.dp)
+                )
+            }
+            Icon(
+                modifier = Modifier.padding(10.dp),
+                imageVector = Icons.Default.ExpandMore,
+                contentDescription = description
             )
         }
     }
