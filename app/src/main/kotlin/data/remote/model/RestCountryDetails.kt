@@ -34,7 +34,7 @@ data class RestCountryDetails(
     val subregion: String?,
 
     @field:SerializedName("capital")
-    val capital: List<String>,
+    val capital: List<String>?,
 
     @field:SerializedName("population")
     val population: Long,

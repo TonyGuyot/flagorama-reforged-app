@@ -57,7 +57,7 @@ class CountryRemoteDataSource(private val service: RestCountriesService): BaseRe
                 .filterNot { it == source.name.common },
             flagUrl = source.flags.svgImageUrl,
             subregion = source.subregion ?: "",
-            capital = source.capital.first(),
+            capital = source.capital?.firstOrNull() ?: source.name.common,
             population = source.population,
             area = source.area,
             independent = true,
